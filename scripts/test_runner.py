@@ -160,6 +160,89 @@ def command_exists(name: str) -> bool:
     return shutil.which(name) is not None
 
 
+def find_brew() -> Optional[str]:
+    """Find a usable brew executable."""
+    candidates = [
+        "brew",
+        str(Path.home() / "homebrew" / "bin" / "brew"),
+        str(Path.home() / ".linuxbrew" / "bin" / "brew"),
+        "/opt/homebrew/bin/brew",
+        "/usr/local/bin/brew",
+    ]
+    seen = set()
+    for cand in candidates:
+        path = shutil.which(cand)
+        if not path or path in seen:
+            continue
+        seen.add(path)
+        try:
+            result = subprocess.run(
+                [path, "--version"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True,
+                timeout=5,
+            )
+            if result.returncode == 0 and "Homebrew" in result.stdout:
+                return path
+        except Exception:
+            continue
+    return None
+
+
+def find_suitable_python() -> Optional[str]:
+    """Find a Python 3.10+ interpreter on this machine."""
+    candidates = [
+        sys.executable,
+        "python3.12",
+        "python3.11",
+        "python3.10",
+        str(Path.home() / "miniconda3" / "bin" / "python"),
+        str(Path.home() / "anaconda3" / "bin" / "python"),
+        "/usr/local/bin/python3.12",
+        "/usr/local/bin/python3.11",
+        "/usr/local/bin/python3.10",
+        "/opt/homebrew/bin/python3.12",
+        "/opt/homebrew/bin/python3.11",
+        "/opt/homebrew/bin/python3.10",
+    ]
+    seen = set()
+    for cand in candidates:
+        path = shutil.which(cand)
+        if not path or path in seen:
+            continue
+        seen.add(path)
+        try:
+            result = subprocess.run(
+                [path, "--version"],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                timeout=5,
+            )
+            version_str = result.stdout.strip() or result.stderr.strip()
+            # e.g. "Python 3.11.15"
+            parts = version_str.split()
+            if len(parts) >= 2:
+                version = tuple(int(x) for x in parts[1].split(".")[:2])
+                if version >= (3, 10):
+                    return path
+        except Exception:
+            continue
+    return None
+
+
+def maybe_reexec_with_suitable_python():
+    """If the current interpreter is too old, re-exec with a newer one."""
+    if sys.version_info >= (3, 10):
+        return
+    suitable = find_suitable_python()
+    if suitable:
+        log(f"当前 Python {sys.version_info.major}.{sys.version_info.minor} 不满足要求，切换到 {suitable}", "yellow")
+        os.execv(suitable, [suitable] + sys.argv)
+    # Otherwise fall through and let check_python_version fail cleanly.
+
+
 def check_python_version():
     version = sys.version_info
     if version.major < 3 or (version.major == 3 and version.minor < 10):
@@ -171,8 +254,9 @@ def check_python_version():
 
 
 def check_homebrew() -> bool:
-    if command_exists("brew"):
-        log("Homebrew 已安装", "green")
+    brew_path = find_brew()
+    if brew_path:
+        log(f"Homebrew 已安装：{brew_path}", "green")
         return True
     log("Homebrew 未安装", "red")
     log("请访问 https://brew.sh 安装，然后重新运行本脚本", "yellow")
@@ -189,14 +273,17 @@ def blackhole_installed() -> bool:
 
 
 def install_brew_package(pkg: str):
+    brew_path = find_brew()
+    if not brew_path:
+        fail("找不到 Homebrew，无法安装系统依赖")
     log(f"安装 {pkg} ...", "yellow")
-    result = run(["brew", "install", pkg], timeout=600)
+    result = run([brew_path, "install", pkg], timeout=600)
     if result.returncode != 0:
-        fail(f"{pkg} 安装失败，请手动运行：brew install {pkg}")
+        fail(f"{pkg} 安装失败，请手动运行：{brew_path} install {pkg}")
     log(f"{pkg} 安装完成", "green")
 
 
-def ensure_brew_packages():
+def ensure_brew_packages(skip_blackhole: bool = False):
     needed = []
     if not command_exists("ffmpeg"):
         needed.append("ffmpeg")
@@ -209,11 +296,25 @@ def ensure_brew_packages():
     for pkg in needed:
         install_brew_package(pkg)
 
+    if skip_blackhole:
+        log("跳过 BlackHole 安装（--skip-blackhole）", "yellow")
+        log("注意：端到端 demo 需要手动安装 BlackHole 2ch", "yellow")
+        return
+
     if not blackhole_installed():
         log("BlackHole 2ch 未安装，尝试自动安装 ...", "yellow")
         install_brew_package("blackhole-2ch")
         if not blackhole_installed():
-            fail("BlackHole 2ch 安装后仍未检测到，请重启或手动安装")
+            log("BlackHole 2ch 安装后仍未检测到", "red")
+            log("音频驱动需要 sudo 权限，在非交互式环境下可能无法自动安装", "yellow")
+            log("请手动运行：brew install blackhole-2ch", "yellow")
+            log("安装后重启系统，并在 Audio MIDI Setup 中配置多输出设备", "yellow")
+            if not os.environ.get("SHADOW_FIEND_SKIP_CONFIRM"):
+                try:
+                    cont = input("是否继续安装其他依赖？按回车继续，或 Ctrl+C 退出：")
+                except KeyboardInterrupt:
+                    print()
+                    sys.exit(0)
     else:
         log("BlackHole 2ch 已安装", "green")
 
@@ -275,7 +376,7 @@ def cmd_setup(args: argparse.Namespace):
         fail("Homebrew 是必要依赖")
 
     log("==> 步骤 2/5：安装系统依赖", "yellow")
-    ensure_brew_packages()
+    ensure_brew_packages(skip_blackhole=getattr(args, "skip_blackhole", False))
 
     log("==> 步骤 3/5：音频路由提示", "yellow")
     prompt_audio_routing()
@@ -301,7 +402,18 @@ def cmd_setup(args: argparse.Namespace):
     log("==> 步骤 5/5：安装 Python 依赖", "yellow")
     pip = get_venv_pip()
     run([str(pip), "install", "--upgrade", "pip"], timeout=120)
-    run([str(pip), "install", "-r", "requirements.txt"], timeout=600)
+
+    # If Homebrew lives in a non-standard prefix (e.g. ~/homebrew), tell pip
+    # where to find headers and libraries for building PyAudio.
+    build_env: Dict[str, str] = {}
+    brew_path = find_brew()
+    if brew_path:
+        brew_prefix = Path(brew_path).resolve().parent.parent
+        build_env["CFLAGS"] = f"-I{brew_prefix / 'include'}"
+        build_env["LDFLAGS"] = f"-L{brew_prefix / 'lib'}"
+        build_env["PKG_CONFIG_PATH"] = str(brew_prefix / "lib" / "pkgconfig")
+
+    run([str(pip), "install", "-r", "requirements.txt"], env=build_env, timeout=600)
     log("依赖安装完成", "green")
 
     log("==> 预下载模型", "yellow")
@@ -573,6 +685,7 @@ def cmd_all(args: argparse.Namespace):
 
 
 def main():
+    maybe_reexec_with_suitable_python()
     parser = argparse.ArgumentParser(
         prog="test_runner",
         description="shadow_fiend 一键测试工具",
@@ -581,6 +694,7 @@ def main():
 
     setup_parser = subparsers.add_parser("setup", help="检测环境并安装依赖")
     setup_parser.add_argument("--yes", action="store_true", help="跳过音频路由确认提示")
+    setup_parser.add_argument("--skip-blackhole", action="store_true", help="跳过 BlackHole 安装（端到端 demo 需要手动安装）")
 
     test_parser = subparsers.add_parser("test", help="运行单元测试")
     test_parser.add_argument("--headless", action="store_true", help="跳过 GUI/音频测试")
