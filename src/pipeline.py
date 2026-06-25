@@ -62,6 +62,7 @@ class TranslationPipeline:
 
         self._audio_queue: Queue[np.ndarray] = Queue(maxsize=120)
         self._subtitle_queue: Queue[tuple[str, str]] = Queue()
+        self._subtitle_history: list[dict] = []
 
         self._capture: Optional[AudioCaptureModule] = None
         self._vad: Optional[VADModule] = None
@@ -105,6 +106,7 @@ class TranslationPipeline:
             target_lang=self.target_lang,
             compact=self.compact,
         )
+        self._ui.set_export_srt_callback(self.export_srt)
 
         # Start audio capture.
         self._capture.start()
@@ -186,6 +188,14 @@ class TranslationPipeline:
             logger.error("Translation error: %s", e)
             translated_text = "[翻译失败]"
 
+        end_time = time.time()
+        duration = len(audio) / self.sample_rate if self.sample_rate else 0
+        self._subtitle_history.append({
+            "start": end_time - duration,
+            "end": end_time,
+            "source": source_text,
+            "translated": translated_text,
+        })
         self._subtitle_queue.put((source_text, translated_text))
 
     def _update_ui(self) -> None:
@@ -196,6 +206,27 @@ class TranslationPipeline:
                 self._ui.show_text(source, translated)
             except Exception as e:
                 logger.error("UI update error: %s", e)
+
+    @staticmethod
+    def _format_srt_time(seconds: float) -> str:
+        """将秒数格式化为 SRT 时间戳 HH:MM:SS,mmm。"""
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        secs = int(seconds % 60)
+        millis = int((seconds % 1) * 1000)
+        return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
+
+    def export_srt(self, path: str) -> None:
+        """将当前字幕历史导出为 SRT 文件。"""
+        logger.info("Exporting %d subtitles to %s", len(self._subtitle_history), path)
+        with open(path, "w", encoding="utf-8") as f:
+            for i, item in enumerate(self._subtitle_history, start=1):
+                start = self._format_srt_time(item["start"])
+                end = self._format_srt_time(item["end"])
+                text = item["translated"] if item["translated"] else item["source"]
+                f.write(f"{i}\n")
+                f.write(f"{start} --> {end}\n")
+                f.write(f"{text}\n\n")
 
     def stop(self) -> None:
         """停止 pipeline。"""

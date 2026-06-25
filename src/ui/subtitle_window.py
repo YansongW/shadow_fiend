@@ -29,6 +29,7 @@ class SubtitleWindow:
         self._source_label = None
         self._translated_label = None
         self._drag_pos = None
+        self._export_srt_callback: Optional[callable] = None
 
         # Default appearance settings.
         self._style = {
@@ -152,16 +153,39 @@ class SubtitleWindow:
             self._window.move(event.globalPosition().toPoint() - self._drag_pos)
             event.accept()
 
+    def set_export_srt_callback(self, callback: callable) -> None:
+        """设置导出 SRT 文件时的回调函数。"""
+        self._export_srt_callback = callback
+
     def _show_context_menu(self, pos):
         """显示右键菜单。"""
         menu = self._QtWidgets.QMenu(self._window)
         style_action = menu.addAction("样式设置...")
+        export_srt_action = menu.addAction("导出 SRT...")
         toggle_clickthrough = menu.addAction("切换点击穿透")
         action = menu.exec(self._window.mapToGlobal(pos))
         if action == style_action:
             self._open_style_dialog()
+        elif action == export_srt_action:
+            self._export_srt()
         elif action == toggle_clickthrough:
             self._toggle_click_through()
+
+    def _export_srt(self):
+        """弹出文件对话框并导出 SRT 字幕文件。"""
+        if self._export_srt_callback is None:
+            return
+        path, _ = self._QtWidgets.QFileDialog.getSaveFileName(
+            self._window,
+            "导出 SRT 字幕",
+            "shadow_fiend_subtitles.srt",
+            "SRT files (*.srt)",
+        )
+        if path:
+            try:
+                self._export_srt_callback(path)
+            except Exception as e:
+                logger.error("Failed to export SRT: %s", e)
 
     def _toggle_click_through(self):
         """切换窗口是否接收鼠标事件（点击穿透）。"""
