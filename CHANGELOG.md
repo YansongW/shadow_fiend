@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.0.3] - 2026-06-26
+
+shadow_fiend v0.0.3：实时语音降噪。
+
+### Added
+- 新增 `src/audio/denoiser.py`：基于 RNNoise 的实时降噪模块，对外 16 kHz 接口，内部 48 kHz 帧级处理。
+- Pipeline 在 VAD/ASR 前插入降噪模块，可通过 `--denoise` / `--no-denoise` 控制。
+- 系统托盘菜单新增"降噪"开关。
+- 新增白噪声带噪测试集生成脚本 `scripts/benchmark/generate_noisy_audio.py`。
+- 新增降噪基准测试 `tests/denoiser_benchmark.py`，输出 CER 对比报告。
+
+### Changed
+- 默认启用降噪。
+- 依赖新增 `pyrnnoise` 和 `scipy`。
+
+### Notes
+- 当前合成 TTS 测试集上 RNNoise 对 ASR CER 改善有限（部分场景甚至下降），可能与短句/合成语音特性有关；真实人声场景效果待进一步验证。
+
 ## [0.0.2] - 2026-06-26
 
 shadow_fiend v0.0.2：流式低延迟 pipeline，系统托盘 UI，opus-mt 翻译引擎。

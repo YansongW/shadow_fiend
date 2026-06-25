@@ -30,6 +30,7 @@
 - [x] 降低延迟：Silero VAD + SenseVoice 短窗口流式 ASR
 - [x] 系统托盘 / 菜单栏控制
 - [x] 本地 opus-mt 翻译引擎（优先）+ Argos 回退
+- [x] 实时降噪：RNNoise 集成与 UI 开关
 - [ ] 加入本地 LLM 作为高级翻译选项
 - [ ] Windows 初步支持
 
@@ -53,17 +54,17 @@
 
 ## 当前阶段
 
-**v0.0.2 已发布。**
+**v0.0.3 已发布。**
 
-流式低延迟 pipeline 已落地：Silero VAD + SenseVoice 短窗口流式 ASR + opus-mt/Argos 本地翻译 + 系统托盘 UI。日/韩合成集端到端延迟：first_final 平均日 269 ms / 韩 230 ms（MPS 设备）。
+在 v0.0.2 基础上新增 RNNoise 实时降噪模块，可通过托盘菜单或 CLI 开关控制。Pipeline 数据流：音频捕获 → RNNoise 降噪 → Silero VAD → SenseVoice 流式 ASR → 翻译 → UI。
 
-v0.0.2 构建产物：
-- `shadow_fiend-0.0.2-py3-none-any.whl`
-- `shadow_fiend-0.0.2.tar.gz`
+v0.0.3 构建产物：
+- `shadow_fiend-0.0.3-py3-none-any.whl`
+- `shadow_fiend-0.0.3.tar.gz`
 
 剩余待解决问题：
-- 真实影视/带噪场景下的准确率与延迟（v0.0.3）。
-- 降噪分离清晰人声（下一阶段）。
+- 真实人声/影视场景下降噪效果验证与调优。
+- 降噪对 VAD 触发率的改善评估。
 - 多人音色区分（长期）。
 
-下一步进入 **MVE 3：好用**，重点提升嘈杂/真实场景鲁棒性、上下文翻译与 GitHub Release 分发。
+下一步进入 **MVE 3：好用**，重点提升真实场景鲁棒性、上下文翻译与多人声分离。

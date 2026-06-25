@@ -25,18 +25,20 @@
 <p align="center">
   <img src="https://img.shields.io/badge/ASR-SenseVoice-ff006e?style=flat-square">
   <img src="https://img.shields.io/badge/VAD-Silero-06d6a0?style=flat-square">
+  <img src="https://img.shields.io/badge/Denoise-RNNoise-fb5607?style=flat-square">
   <img src="https://img.shields.io/badge/Translation-opus--mt%20%2F%20Argos-8338ec?style=flat-square">
   <img src="https://img.shields.io/badge/UI-PyQt6%20%2B%20Tray-3a86ff?style=flat-square">
-  <img src="https://img.shields.io/badge/Status-v0.0.2-fb5607?style=flat-square">
+  <img src="https://img.shields.io/badge/Status-v0.0.3-fb5607?style=flat-square">
 </p>
 
 ## Features
 
 - 🔒 **Fully offline** — audio never leaves your machine
 - 🚀 **Streaming low-latency ASR** — SenseVoice-Small + Silero VAD + 500 ms sliding window
+- 🔇 **Real-time denoising** — RNNoise reduces background noise before recognition
 - 🌐 **Local translation** — Helsinki-NLP/opus-mt preferred, Argos Translate fallback
 - 🎨 **Floating subtitle overlay** — transparent, always-on-top, draggable
-- 🖥️ **System tray / menu bar** — start/pause, style, position, click-through, SRT export
+- 🖥️ **System tray / menu bar** — start/pause, denoise toggle, style, position, click-through, SRT export
 - 🎬 **Built for watching** — captures system audio from any player
 
 ## Quick Start
@@ -73,11 +75,12 @@ Supported languages: `zh`, `en`, `ja`, `ko`.
 
 ## Development Status
 
-v0.0.2 released. Core modules implemented and verified:
+v0.0.3 released. Core modules implemented and verified:
 
 - ✅ Audio capture (BlackHole + PyAudio)
 - ✅ Silero VAD segmentation
 - ✅ Streaming SenseVoice ASR (500 ms window / 200 ms hop)
+- ✅ RNNoise real-time denoising (16 kHz I/O, internal 48 kHz)
 - ✅ opus-mt direct translation engine with Argos fallback
 - ✅ PyQt6 subtitle overlay + system tray controller
 - ✅ Streaming end-to-end pipeline
