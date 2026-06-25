@@ -71,7 +71,7 @@ Supported languages: `zh`, `en`, `ja`, `ko`.
 
 ## Development Status
 
-MVE stage. Core modules implemented and unit-tested:
+MVE stage. Core modules implemented and verified:
 
 - ✅ Audio capture (BlackHole + PyAudio)
 - ✅ VAD segmentation
@@ -80,48 +80,18 @@ MVE stage. Core modules implemented and unit-tested:
 - ✅ PyQt6 subtitle overlay
 - ✅ End-to-end pipeline
 
-End-to-end live demo needs verification on a machine with Python 3.10+ and Homebrew.
+End-to-end live demo verified on macOS Apple Silicon + BlackHole 2ch.
 
-## One-Click Testing
+> **Testing code** is maintained on the [`test`](https://github.com/YansongW/shadow_fiend/tree/test) branch. See [`ROADMAP.md`](ROADMAP.md) for planned improvements.
 
-Run the full automated test flow (setup → unit tests → 30s demo with screen recording → log report → cleanup):
+## macOS 双击运行
 
-```bash
-./scripts/one_click_test.sh
-```
+针对 v0.0.1 发布包，项目根目录提供两个 `.command` 脚本：
 
-Options:
-- `--no-cleanup` — keep the test environment and downloaded models for debugging
-- `--duration <seconds>` — change the demo runtime (default 30)
-- `--yes` — skip the audio routing confirmation prompt
+1. **安装 shadow_fiend.command** — 首次运行时双击，自动安装 Homebrew 依赖并创建 Python 虚拟环境。
+2. **启动 shadow_fiend.command** — 双击启动实时字幕浮窗（默认 `ja -> zh`）。
 
-After a run, a zip report is saved under `test-reports/` with logs, screen recording, environment info, and pip list.
-
-> The first run will ask for screen recording permission. Grant it when the system dialog appears so the demo can be recorded.
-
-### Manual Test Commands
-
-```bash
-python scripts/test_runner.py setup     # detect env, install deps, create .venv-test
-python scripts/test_runner.py test      # run pytest
-python scripts/test_runner.py demo --duration 30   # run demo + screen recording
-python scripts/test_runner.py logs      # package a report zip
-python scripts/test_runner.py cleanup   # remove .venv-test, logs, models
-```
-
-### Docker (headless unit tests only)
-
-```bash
-./scripts/test_in_docker.sh
-```
-
-> Docker cannot access macOS audio hardware or GUI, so it only runs non-GUI/non-audio unit tests. The end-to-end demo still requires macOS + BlackHole 2ch.
-
-## Testing
-
-```bash
-./.venv/bin/python -m pytest tests/ -v
-```
+> 双击前请确保已配置好 BlackHole 2ch 多输出音频设备。
 
 ## Project Structure
 
@@ -136,7 +106,6 @@ shadow_fiend/
 │   ├── translation/ # Argos translation
 │   ├── ui/          # subtitle overlay
 │   └── pipeline.py  # orchestration
-├── tests/
 └── scripts/
 ```
 
