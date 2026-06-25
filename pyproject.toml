@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shadow-fiend"
+version = "0.0.2"
+description = "Local real-time subtitle translation for movies and shows"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [
+    {name = "YansongW"},
+]
+keywords = ["subtitle", "translation", "asr", "sensevoice", "offline"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = [
+    "pyaudio>=0.2.14",
+    "numpy>=1.26.0",
+    "funasr>=1.1.0",
+    "torch>=2.3.0",
+    "torchaudio>=2.3.0",
+    "argostranslate>=1.9.6",
+    "transformers>=4.40.0",
+    "sentencepiece>=0.2.0",
+    "PyQt6>=6.7.0",
+    "requests>=2.32.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "build>=1.0.0",
+    "twine>=5.0.0",
+]
+
+[project.scripts]
+shadow-fiend = "main:main"
+
+[project.urls]
+Homepage = "https://github.com/YansongW/shadow_fiend"
+Repository = "https://github.com/YansongW/shadow_fiend"
+Issues = "https://github.com/YansongW/shadow_fiend/issues"
+
+[tool.setuptools]
+py-modules = ["main", "pipeline_streaming"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"ui" = ["assets/*.png"]
+"*" = ["*.png", "*.svg", "*.wav", "*.md"]

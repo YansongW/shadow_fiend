@@ -2,10 +2,13 @@
 字幕浮窗 UI 模块。
 
 使用 PyQt6 实现一个半透明、置顶、可拖拽的窗口，用于显示原文和译文。
+搭配系统托盘控制器提供设置入口。
 """
 
 import logging
 from typing import Optional
+
+from ui.tray_controller import TrayController
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +46,14 @@ class SubtitleWindow:
             "y": None,
         }
 
+        self._click_through = False
+        self._listening = True
+        self._tray: Optional[TrayController] = None
+
+        # Callbacks set by the pipeline.
+        self.on_toggle_listening: Optional[callable] = None
+        self.on_export_srt_request: Optional[callable] = None
+
     def _ensure_qt(self):
         """延迟初始化 Qt 对象。"""
         if self._app is not None:
@@ -73,7 +84,7 @@ class SubtitleWindow:
         self._window.setAttribute(QtCore.Qt.WidgetAttribute.WA_TranslucentBackground)
         self._window.setAttribute(QtCore.Qt.WidgetAttribute.WA_DeleteOnClose)
 
-        # Enable context menu (right-click) and click-through toggle.
+        # Enable context menu (right-click).
         self._window.setContextMenuPolicy(QtCore.Qt.ContextMenuPolicy.CustomContextMenu)
         self._window.customContextMenuRequested.connect(self._show_context_menu)
 
@@ -116,6 +127,26 @@ class SubtitleWindow:
         self._window.mousePressEvent = self._on_mouse_press
         self._window.mouseMoveEvent = self._on_mouse_move
 
+        # Setup system tray.
+        self._setup_tray()
+
+    def _setup_tray(self) -> None:
+        """初始化系统托盘/菜单栏图标。"""
+        self._tray = TrayController(
+            parent=self._window,
+            on_toggle_listening=self._toggle_listening,
+            on_style_settings=self._open_style_dialog,
+            on_export_srt=self._export_srt,
+            on_position_top=lambda: self._set_position("top"),
+            on_position_center=lambda: self._set_position("center"),
+            on_position_bottom=lambda: self._set_position("bottom"),
+            on_toggle_click_through=self._toggle_click_through,
+            on_quit=self._quit,
+        )
+        if not self._tray.setup():
+            logger.warning("Tray icon not available; using window context menu only")
+            self._tray = None
+
     def _apply_styles(self):
         """根据当前样式配置更新控件外观。"""
         alpha = self._style["background_alpha"]
@@ -152,6 +183,15 @@ class SubtitleWindow:
             y = int(screen.height() * 0.75)
         self._window.move(x, y)
 
+    def _set_position(self, position: str) -> None:
+        """设置预设位置。"""
+        self._style["position"] = position
+        if position != "custom":
+            self._style["x"] = None
+            self._style["y"] = None
+        self._apply_position()
+        logger.info("Subtitle position set to %s", position)
+
     def _on_mouse_press(self, event):
         if event.button() == self._QtCore.Qt.MouseButton.LeftButton:
             self._drag_pos = event.globalPosition().toPoint() - self._window.frameGeometry().topLeft()
@@ -172,11 +212,12 @@ class SubtitleWindow:
         self._export_srt_callback = callback
 
     def _show_context_menu(self, pos):
-        """显示右键菜单。"""
+        """显示浮窗右键菜单（精简版，主要入口在托盘）。"""
         menu = self._QtWidgets.QMenu(self._window)
-        style_action = menu.addAction("样式设置...")
+        style_action = menu.addAction("字幕样式...")
         export_srt_action = menu.addAction("导出 SRT...")
         toggle_clickthrough = menu.addAction("切换点击穿透")
+        quit_action = menu.addAction("退出")
         action = menu.exec(self._window.mapToGlobal(pos))
         if action == style_action:
             self._open_style_dialog()
@@ -184,6 +225,17 @@ class SubtitleWindow:
             self._export_srt()
         elif action == toggle_clickthrough:
             self._toggle_click_through()
+        elif action == quit_action:
+            self._quit()
+
+    def _toggle_listening(self) -> None:
+        """切换开始/暂停监听（由托盘调用）。"""
+        self._listening = not self._listening
+        if self._tray is not None:
+            self._tray.set_listening(self._listening)
+        if self.on_toggle_listening:
+            self.on_toggle_listening(self._listening)
+        logger.info("Listening %s", "enabled" if self._listening else "paused")
 
     def _export_srt(self):
         """弹出文件对话框并导出 SRT 字幕文件。"""
@@ -198,6 +250,8 @@ class SubtitleWindow:
         if path:
             try:
                 self._export_srt_callback(path)
+                if self._tray is not None:
+                    self._tray.show_message("shadow_fiend", f"已导出 SRT：{path}")
             except Exception as e:
                 logger.error("Failed to export SRT: %s", e)
 
@@ -206,17 +260,21 @@ class SubtitleWindow:
         flags = self._window.windowFlags()
         if flags & self._QtCore.Qt.WindowType.WindowTransparentForInput:
             flags &= ~self._QtCore.Qt.WindowType.WindowTransparentForInput
+            self._click_through = False
             logger.info("Click-through disabled")
         else:
             flags |= self._QtCore.Qt.WindowType.WindowTransparentForInput
+            self._click_through = True
             logger.info("Click-through enabled")
         self._window.setWindowFlags(flags)
         self._window.show()
+        if self._tray is not None:
+            self._tray.set_click_through(self._click_through)
 
     def _open_style_dialog(self):
         """打开样式设置对话框。"""
         dialog = self._QtWidgets.QDialog(self._window)
-        dialog.setWindowTitle("字幕样式设置")
+        dialog.setWindowTitle("字幕样式")
         layout = self._QtWidgets.QFormLayout(dialog)
 
         # Source font size.
@@ -298,6 +356,10 @@ class SubtitleWindow:
             button.setText(hex_color)
             button.setStyleSheet(f"background-color: {hex_color}; color: #000000;")
 
+    def _quit(self) -> None:
+        """退出应用程序。"""
+        self._app.quit()
+
     def show_text(self, source: str, translated: str) -> None:
         """更新字幕内容。"""
         self._ensure_qt()
@@ -307,6 +369,11 @@ class SubtitleWindow:
         else:
             self._translated_label.setVisible(True)
             self._translated_label.setText(translated)
+
+    def show_partial_source(self, source: str) -> None:
+        """仅更新原文（partial 阶段），不清空已有译文。"""
+        self._ensure_qt()
+        self._source_label.setText(source)
 
     def show(self) -> None:
         """显示浮窗。"""
