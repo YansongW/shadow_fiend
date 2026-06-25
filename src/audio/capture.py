@@ -8,6 +8,7 @@ import logging
 from typing import Optional
 
 import numpy as np
+from scipy import signal
 
 logger = logging.getLogger(__name__)
 
@@ -37,6 +38,8 @@ class AudioCaptureModule:
         self.channels = channels
         self.chunk_duration_ms = chunk_duration_ms
         self._chunk_size = int(sample_rate * channels * chunk_duration_ms / 1000)
+        self._device_sample_rate: Optional[int] = None
+        self._device_chunk_size: Optional[int] = None
 
         self._pyaudio: Optional[pyaudio.PyAudio] = None
         self._stream: Optional[pyaudio.Stream] = None
@@ -89,13 +92,28 @@ class AudioCaptureModule:
         self._pyaudio = pyaudio.PyAudio()
         device_index = self._find_device_index()
 
+        # Open the stream at the device's native sample rate and resample in
+        # software. PyAudio's built-in resampling can produce distorted audio
+        # when the requested rate differs from the device's default rate
+        # (e.g. BlackHole 2ch reports 48000 Hz but we want 16000 Hz).
+        device_info = self._pyaudio.get_device_info_by_index(device_index)
+        self._device_sample_rate = int(device_info.get("defaultSampleRate", self.sample_rate))
+        self._device_chunk_size = int(
+            self._chunk_size * self._device_sample_rate / self.sample_rate
+        )
+        logger.info(
+            "Opening audio stream at native sample rate %d Hz (target %d Hz)",
+            self._device_sample_rate,
+            self.sample_rate,
+        )
+
         self._stream = self._pyaudio.open(
             format=pyaudio.paInt16,
             channels=self.channels,
-            rate=self.sample_rate,
+            rate=self._device_sample_rate,
             input=True,
             input_device_index=device_index,
-            frames_per_buffer=self._chunk_size,
+            frames_per_buffer=self._device_chunk_size,
         )
         self._is_running = True
 
@@ -109,12 +127,17 @@ class AudioCaptureModule:
         if not self._is_running or self._stream is None:
             raise RuntimeError("Audio capture is not started")
 
-        data = self._stream.read(self._chunk_size, exception_on_overflow=False)
+        data = self._stream.read(self._device_chunk_size, exception_on_overflow=False)
         samples = np.frombuffer(data, dtype=np.int16).astype(np.float32) / 32768.0
 
         # If stereo, convert to mono by averaging channels.
         if self.channels > 1:
             samples = samples.reshape(-1, self.channels).mean(axis=1)
+
+        # Resample from the device's native rate to the target rate.
+        if self._device_sample_rate != self.sample_rate:
+            num_target = int(len(samples) * self.sample_rate / self._device_sample_rate)
+            samples = signal.resample(samples, num_target)
 
         return samples
 

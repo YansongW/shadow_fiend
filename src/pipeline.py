@@ -41,12 +41,14 @@ class TranslationPipeline:
         device_name: str = "BlackHole 2ch",
         sample_rate: int = 16000,
         compact: bool = False,
+        asr_device: str = "auto",
     ):
         self.source_lang = source_lang
         self.target_lang = target_lang
         self.device_name = device_name
         self.sample_rate = sample_rate
         self.compact = compact
+        self.asr_device = asr_device
 
         self._running = False
         self._audio_thread: Optional[threading.Thread] = None
@@ -76,7 +78,7 @@ class TranslationPipeline:
             chunk_duration_ms=100,
         )
         self._vad = VADModule(sample_rate=self.sample_rate)
-        self._asr = ASRModule(device="auto")
+        self._asr = ASRModule(device=self.asr_device)
         # Pre-load ASR model so the first utterance does not block the
         # processing thread and overflow the audio queue.
         logger.info("Pre-loading ASR model...")

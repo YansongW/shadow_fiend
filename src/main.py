@@ -20,6 +20,7 @@ def main():
     parser.add_argument("--source", default="auto", help="Source language code (e.g. ja, ko, zh, en)")
     parser.add_argument("--target", default="zh", help="Target language code (e.g. zh, en)")
     parser.add_argument("--device", default="BlackHole 2ch", help="Audio input device name")
+    parser.add_argument("--asr-device", default="auto", help="Device for ASR inference (auto/cpu/cuda/mps)")
     parser.add_argument("--compact", action="store_true", help="Show only translated text")
     parser.add_argument(
         "--duration",
@@ -39,6 +40,7 @@ def main():
         source_lang=args.source,
         target_lang=args.target,
         device_name=args.device,
+        asr_device=args.asr_device,
         compact=args.compact,
     )
 
