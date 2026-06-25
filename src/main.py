@@ -21,6 +21,9 @@ def main():
     parser.add_argument("--target", default="zh", help="Target language code (e.g. zh, en)")
     parser.add_argument("--device", default="BlackHole 2ch", help="Audio input device name")
     parser.add_argument("--asr-device", default="auto", help="Device for ASR inference (auto/cpu/cuda/mps)")
+    parser.add_argument("--max-utterance-ms", type=int, default=5000, help="Max utterance length in ms (default 5000)")
+    parser.add_argument("--min-silence-ms", type=int, default=350, help="Min silence length to end utterance in ms (default 350)")
+    parser.add_argument("--min-speech-ms", type=int, default=200, help="Min speech length to form utterance in ms (default 200)")
     parser.add_argument("--compact", action="store_true", help="Show only translated text")
     parser.add_argument(
         "--duration",
@@ -42,6 +45,9 @@ def main():
         device_name=args.device,
         asr_device=args.asr_device,
         compact=args.compact,
+        max_utterance_ms=args.max_utterance_ms,
+        min_silence_ms=args.min_silence_ms,
+        min_speech_ms=args.min_speech_ms,
     )
 
     timer = None

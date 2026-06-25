@@ -42,6 +42,9 @@ class TranslationPipeline:
         sample_rate: int = 16000,
         compact: bool = False,
         asr_device: str = "auto",
+        max_utterance_ms: int = 5000,
+        min_silence_ms: int = 350,
+        min_speech_ms: int = 200,
     ):
         self.source_lang = source_lang
         self.target_lang = target_lang
@@ -49,6 +52,9 @@ class TranslationPipeline:
         self.sample_rate = sample_rate
         self.compact = compact
         self.asr_device = asr_device
+        self.max_utterance_ms = max_utterance_ms
+        self.min_silence_ms = min_silence_ms
+        self.min_speech_ms = min_speech_ms
 
         self._running = False
         self._audio_thread: Optional[threading.Thread] = None
@@ -77,7 +83,12 @@ class TranslationPipeline:
             sample_rate=self.sample_rate,
             chunk_duration_ms=100,
         )
-        self._vad = VADModule(sample_rate=self.sample_rate)
+        self._vad = VADModule(
+            sample_rate=self.sample_rate,
+            max_utterance_ms=self.max_utterance_ms,
+            min_silence_ms=self.min_silence_ms,
+            min_speech_ms=self.min_speech_ms,
+        )
         self._asr = ASRModule(device=self.asr_device)
         # Pre-load ASR model so the first utterance does not block the
         # processing thread and overflow the audio queue.
