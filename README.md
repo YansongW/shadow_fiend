@@ -82,6 +82,38 @@ MVE stage. Core modules implemented and unit-tested:
 
 End-to-end live demo needs verification on a machine with Python 3.10+ and Homebrew.
 
+## One-Click Testing
+
+Run the full automated test flow (setup → unit tests → timed demo → log report → cleanup):
+
+```bash
+./scripts/one_click_test.sh
+```
+
+Options:
+- `--no-cleanup` — keep the test environment and downloaded models for debugging
+- `--duration <seconds>` — change the demo runtime (default 60)
+
+After a run, a zip report is saved under `test-reports/` with logs, environment info, and pip list.
+
+### Manual Test Commands
+
+```bash
+python scripts/test_runner.py setup     # create .venv-test & download models
+python scripts/test_runner.py test      # run pytest
+python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py logs      # package a report zip
+python scripts/test_runner.py cleanup   # remove .venv-test, logs, models
+```
+
+### Docker (headless unit tests only)
+
+```bash
+./scripts/test_in_docker.sh
+```
+
+> Docker cannot access macOS audio hardware or GUI, so it only runs non-GUI/non-audio unit tests. The end-to-end demo still requires macOS + BlackHole 2ch.
+
 ## Testing
 
 ```bash

@@ -72,6 +72,38 @@ cd shadow_fiend
 
 端到端实时演示需要在配备 Python 3.10+ 和 Homebrew 的 macOS 环境上验证。
 
+## 一键测试
+
+全自动流程：创建环境 → 单元测试 → 限时 demo → 打包日志 → 清理：
+
+```bash
+./scripts/one_click_test.sh
+```
+
+选项：
+- `--no-cleanup` — 保留测试环境与下载的模型，方便排查
+- `--duration <秒>` — 调整 demo 运行时长（默认 60 秒）
+
+运行结束后会在 `test-reports/` 下生成 zip 报告，包含日志、环境信息和 pip 列表。
+
+### 手动测试命令
+
+```bash
+python scripts/test_runner.py setup     # 创建 .venv-test 并下载模型
+python scripts/test_runner.py test      # 运行 pytest
+python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py logs      # 打包报告 zip
+python scripts/test_runner.py cleanup   # 删除 .venv-test、日志、模型
+```
+
+### Docker（仅无 GUI 单元测试）
+
+```bash
+./scripts/test_in_docker.sh
+```
+
+> Docker 无法访问 macOS 音频硬件和 GUI，因此只运行非 GUI/非音频单元测试。端到端 demo 仍需 macOS + BlackHole 2ch。
+
 ## 运行测试
 
 ```bash

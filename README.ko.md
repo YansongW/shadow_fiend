@@ -72,6 +72,38 @@ MVE 단계입니다. 핵심 모듈이 구현되었고 단위 테스트를 통과
 
 엔드투엔드 실시간 데모는 Python 3.10+ 및 Homebrew가 설치된 macOS 환경에서 검증해야 합니다.
 
+## 원클릭 테스트
+
+자동화된 전체 테스트 흐름(환경 설정 → 단위 테스트 → 제한 시간 demo → 로그 보고서 → 정리):
+
+```bash
+./scripts/one_click_test.sh
+```
+
+옵션:
+- `--no-cleanup` — 디버깅을 위해 테스트 환경과 다운로드한 모델 유지
+- `--duration <초>` — demo 실행 시간 변경(기본 60초)
+
+실행 후 `test-reports/` 아래에 로그, 환경 정보, pip 목록이 포함된 zip 보고서가 저장됩니다.
+
+### 수동 테스트 명령
+
+```bash
+python scripts/test_runner.py setup     # .venv-test 생성 및 모델 다운로드
+python scripts/test_runner.py test      # pytest 실행
+python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py logs      # zip 보고서 패키징
+python scripts/test_runner.py cleanup   # .venv-test, 로그, 모델 삭제
+```
+
+### Docker(헤드리스 단위 테스트 전용)
+
+```bash
+./scripts/test_in_docker.sh
+```
+
+> Docker는 macOS 오디오 하드웨어와 GUI에 접근할 수 없으므로 GUI/오디오가 필요 없는 단위 테스트만 실행합니다. 엔드투엔드 demo는 macOS + BlackHole 2ch가 필요합니다.
+
 ## 테스트
 
 ```bash

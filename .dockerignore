@@ -1,0 +1,12 @@
+.git
+.venv
+.venv-test
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+logs
+test-reports
+*.log
+*.zip

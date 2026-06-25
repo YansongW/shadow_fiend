@@ -5,6 +5,7 @@ shadow_fiend 入口模块。
 import argparse
 import logging
 import sys
+import threading
 
 from pipeline import TranslationPipeline
 
@@ -20,10 +21,18 @@ def main():
     parser.add_argument("--target", default="zh", help="Target language code (e.g. zh, en)")
     parser.add_argument("--device", default="BlackHole 2ch", help="Audio input device name")
     parser.add_argument("--compact", action="store_true", help="Show only translated text")
+    parser.add_argument(
+        "--duration",
+        type=int,
+        default=None,
+        help="Auto-stop after N seconds (useful for automated testing)",
+    )
     args = parser.parse_args()
 
     print(f"shadow_fiend 启动中...")
     print(f"源语言: {args.source}, 目标语言: {args.target}")
+    if args.duration:
+        print(f"测试模式：{args.duration} 秒后自动退出")
     print("按 Ctrl+C 退出")
 
     pipeline = TranslationPipeline(
@@ -33,12 +42,26 @@ def main():
         compact=args.compact,
     )
 
+    timer = None
+    if args.duration:
+
+        def _auto_stop():
+            print("\n[test] 达到设定运行时长，自动退出")
+            pipeline.stop()
+
+        timer = threading.Timer(args.duration, _auto_stop)
+        timer.daemon = True
+        timer.start()
+
     try:
         pipeline.run()
     except KeyboardInterrupt:
         print("\nExiting...")
         pipeline.stop()
         sys.exit(0)
+    finally:
+        if timer is not None:
+            timer.cancel()
 
 
 if __name__ == "__main__":
