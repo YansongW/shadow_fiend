@@ -39,6 +39,8 @@ class SubtitleWindow:
             "translated_color": "#f0f0f0",
             "background_alpha": 180,
             "position": "bottom",
+            "x": None,
+            "y": None,
         }
 
     def _ensure_qt(self):
@@ -132,6 +134,13 @@ class SubtitleWindow:
 
     def _apply_position(self):
         """根据当前位置配置调整窗口位置。"""
+        # Use saved custom coordinates if available.
+        x = self._style.get("x")
+        y = self._style.get("y")
+        if x is not None and y is not None:
+            self._window.move(int(x), int(y))
+            return
+
         screen = self._app.primaryScreen().geometry()
         x = (screen.width() - self._window.width()) // 2
         position = self._style.get("position", "bottom")
@@ -151,6 +160,11 @@ class SubtitleWindow:
     def _on_mouse_move(self, event):
         if self._drag_pos is not None and event.buttons() == self._QtCore.Qt.MouseButton.LeftButton:
             self._window.move(event.globalPosition().toPoint() - self._drag_pos)
+            # Remember custom position while dragging so it survives re-apply.
+            pos = self._window.pos()
+            self._style["x"] = pos.x()
+            self._style["y"] = pos.y()
+            self._style["position"] = "custom"
             event.accept()
 
     def set_export_srt_callback(self, callback: callable) -> None:
@@ -245,7 +259,7 @@ class SubtitleWindow:
 
         # Position.
         position_combo = self._QtWidgets.QComboBox()
-        position_combo.addItems(["top", "center", "bottom"])
+        position_combo.addItems(["custom", "top", "center", "bottom"])
         position_combo.setCurrentText(self._style["position"])
         layout.addRow("窗口位置:", position_combo)
 
@@ -262,7 +276,11 @@ class SubtitleWindow:
             self._style["source_font_size"] = source_size_spin.value()
             self._style["translated_font_size"] = translated_size_spin.value()
             self._style["background_alpha"] = alpha_slider.value()
-            self._style["position"] = position_combo.currentText()
+            new_position = position_combo.currentText()
+            self._style["position"] = new_position
+            if new_position != "custom":
+                self._style["x"] = None
+                self._style["y"] = None
             self._apply_styles()
             self._apply_position()
             logger.info("Subtitle style updated: %s", self._style)
