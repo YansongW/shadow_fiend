@@ -32,6 +32,7 @@ import time
 import zipfile
 from datetime import datetime
 from pathlib import Path
+from typing import Dict, Optional, Union
 
 # ---------------------------------------------------------------------------
 # Configuration
@@ -116,10 +117,10 @@ def get_venv_pip() -> Path:
 
 
 def run(
-    cmd: list[str],
-    env: dict[str, str] | None = None,
-    cwd: Path | None = None,
-    timeout: int | None = None,
+    cmd: list,
+    env: Optional[Dict[str, str]] = None,
+    cwd: Optional[Path] = None,
+    timeout: Optional[int] = None,
     capture: bool = True,
 ) -> subprocess.CompletedProcess:
     merged_env = os.environ.copy()
@@ -241,6 +242,22 @@ def detect_default_output_contains_blackhole() -> bool:
             timeout=10,
         )
         return "BlackHole" in result.stdout
+    except Exception:
+        return False
+
+
+def check_screen_recording_permission() -> bool:
+    """Check if the terminal has screen recording permission."""
+    try:
+        result = subprocess.run(
+            ["screencapture", "-v", "-t", "mov", "-C", "/dev/null"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=5,
+        )
+        # If it exits quickly without doing anything meaningful, permission may be denied.
+        return result.returncode == 0
     except Exception:
         return False
 
@@ -562,7 +579,8 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    subparsers.add_parser("setup", help="检测环境并安装依赖")
+    setup_parser = subparsers.add_parser("setup", help="检测环境并安装依赖")
+    setup_parser.add_argument("--yes", action="store_true", help="跳过音频路由确认提示")
 
     test_parser = subparsers.add_parser("test", help="运行单元测试")
     test_parser.add_argument("--headless", action="store_true", help="跳过 GUI/音频测试")
