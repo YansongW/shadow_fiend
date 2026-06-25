@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shadow_fiend 一键测试入口
 # 用法：./scripts/one_click_test.sh [选项]
-# 默认执行 setup → test → demo → logs → cleanup
+# 默认执行 setup → test → demo（30秒） → 录屏 → logs → cleanup
 
 set -euo pipefail
 
@@ -12,14 +12,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
 BLUE='\033[0;34m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 info()  { echo -e "${BLUE}[INFO]${NC}  $*"; }
 ok()    { echo -e "${GREEN}[OK]${NC}    $*"; }
 warn()  { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error() { echo -e "${RED}[ERROR]${NC} $*"; }
+step()  { echo -e "${CYAN}[STEP]${NC}  $*"; }
 
-info "shadow_fiend 一键测试启动"
+step "shadow_fiend 一键测试启动"
 
 # Check python3
 if ! command -v python3 &> /dev/null; then
@@ -41,16 +43,19 @@ for arg in "$@"; do
 done
 
 # Build test_runner args
-RUNNER_ARGS=("all" "--duration" "60")
+default_duration=30
+RUNNER_ARGS=("all" "--duration" "$default_duration")
 if [ "$NO_CLEANUP" = true ]; then
     RUNNER_ARGS+=("--no-cleanup")
 fi
 RUNNER_ARGS+=("${ARGS[@]}")
 
+step "即将全自动执行：环境检测 → 安装依赖 → 单元测试 → ${default_duration}s demo（自动录屏） → 打包报告 → 清理"
 info "执行：python3 scripts/test_runner.py ${RUNNER_ARGS[*]}"
 
 if python3 scripts/test_runner.py "${RUNNER_ARGS[@]}"; then
     ok "一键测试完成"
+    info "报告位置：$(pwd)/test-reports/"
 else
     error "一键测试失败"
     info "日志目录：$(pwd)/logs"

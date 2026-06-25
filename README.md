@@ -84,7 +84,7 @@ End-to-end live demo needs verification on a machine with Python 3.10+ and Homeb
 
 ## One-Click Testing
 
-Run the full automated test flow (setup → unit tests → timed demo → log report → cleanup):
+Run the full automated test flow (setup → unit tests → 30s demo with screen recording → log report → cleanup):
 
 ```bash
 ./scripts/one_click_test.sh
@@ -92,16 +92,19 @@ Run the full automated test flow (setup → unit tests → timed demo → log re
 
 Options:
 - `--no-cleanup` — keep the test environment and downloaded models for debugging
-- `--duration <seconds>` — change the demo runtime (default 60)
+- `--duration <seconds>` — change the demo runtime (default 30)
+- `--yes` — skip the audio routing confirmation prompt
 
-After a run, a zip report is saved under `test-reports/` with logs, environment info, and pip list.
+After a run, a zip report is saved under `test-reports/` with logs, screen recording, environment info, and pip list.
+
+> The first run will ask for screen recording permission. Grant it when the system dialog appears so the demo can be recorded.
 
 ### Manual Test Commands
 
 ```bash
-python scripts/test_runner.py setup     # create .venv-test & download models
+python scripts/test_runner.py setup     # detect env, install deps, create .venv-test
 python scripts/test_runner.py test      # run pytest
-python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py demo --duration 30   # run demo + screen recording
 python scripts/test_runner.py logs      # package a report zip
 python scripts/test_runner.py cleanup   # remove .venv-test, logs, models
 ```

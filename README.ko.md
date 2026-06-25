@@ -74,7 +74,7 @@ MVE 단계입니다. 핵심 모듈이 구현되었고 단위 테스트를 통과
 
 ## 원클릭 테스트
 
-자동화된 전체 테스트 흐름(환경 설정 → 단위 테스트 → 제한 시간 demo → 로그 보고서 → 정리):
+자동화된 전체 테스트 흐름(환경 감지 → 의존성 설치 → 단위 테스트 → 30초 demo + 화면 녹화 → 로그 보고서 → 정리):
 
 ```bash
 ./scripts/one_click_test.sh
@@ -82,16 +82,19 @@ MVE 단계입니다. 핵심 모듈이 구현되었고 단위 테스트를 통과
 
 옵션:
 - `--no-cleanup` — 디버깅을 위해 테스트 환경과 다운로드한 모델 유지
-- `--duration <초>` — demo 실행 시간 변경(기본 60초)
+- `--duration <초>` — demo 실행 시간 변경(기본 30초)
+- `--yes` — 오디오 라우팅 확인 프롬프트 건
 
-실행 후 `test-reports/` 아래에 로그, 환경 정보, pip 목록이 포함된 zip 보고서가 저장됩니다.
+실행 후 `test-reports/` 아래에 로그, 녹화 영상, 환경 정보, pip 목록이 포함된 zip 보고서가 저장됩니다.
+
+> 첫 녹화 실행 시 시스템 권한 대화 상자가 나타납니다. demo 녹화를 위해 허용을 클릭하세요.
 
 ### 수동 테스트 명령
 
 ```bash
-python scripts/test_runner.py setup     # .venv-test 생성 및 모델 다운로드
+python scripts/test_runner.py setup     # 환경 감지, 의존성 설치, .venv-test 생성
 python scripts/test_runner.py test      # pytest 실행
-python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py demo --duration 30   # demo + 자동 화면 녹화
 python scripts/test_runner.py logs      # zip 보고서 패키징
 python scripts/test_runner.py cleanup   # .venv-test, 로그, 모델 삭제
 ```

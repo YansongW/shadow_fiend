@@ -74,7 +74,7 @@ cd shadow_fiend
 
 ## 一键测试
 
-全自动流程：创建环境 → 单元测试 → 限时 demo → 打包日志 → 清理：
+全自动流程：环境检测 → 安装依赖 → 单元测试 → 30 秒 demo（自动录屏） → 打包日志 → 清理：
 
 ```bash
 ./scripts/one_click_test.sh
@@ -82,16 +82,19 @@ cd shadow_fiend
 
 选项：
 - `--no-cleanup` — 保留测试环境与下载的模型，方便排查
-- `--duration <秒>` — 调整 demo 运行时长（默认 60 秒）
+- `--duration <秒>` — 调整 demo 运行时长（默认 30 秒）
+- `--yes` — 跳过音频路由确认提示
 
-运行结束后会在 `test-reports/` 下生成 zip 报告，包含日志、环境信息和 pip 列表。
+运行结束后会在 `test-reports/` 下生成 zip 报告，包含日志、录屏视频、环境信息和 pip 列表。
+
+> 首次运行录屏时会弹出系统授权对话框，请点击允许，否则录屏会失败。
 
 ### 手动测试命令
 
 ```bash
-python scripts/test_runner.py setup     # 创建 .venv-test 并下载模型
+python scripts/test_runner.py setup     # 检测环境、安装依赖、创建 .venv-test
 python scripts/test_runner.py test      # 运行 pytest
-python scripts/test_runner.py demo --duration 30
+python scripts/test_runner.py demo --duration 30   # demo + 自动录屏
 python scripts/test_runner.py logs      # 打包报告 zip
 python scripts/test_runner.py cleanup   # 删除 .venv-test、日志、模型
 ```

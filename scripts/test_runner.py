@@ -5,17 +5,19 @@ shadow_fiend 一键测试工具。
 用法：
     python scripts/test_runner.py setup
     python scripts/test_runner.py test
-    python scripts/test_runner.py demo --duration 60
+    python scripts/test_runner.py demo --duration 30
     python scripts/test_runner.py logs
     python scripts/test_runner.py cleanup
-    python scripts/test_runner.py all --duration 60
+    python scripts/test_runner.py all --duration 30
 
 功能：
+    - 检测 macOS 环境、Python 版本、Homebrew
+    - 自动安装 portaudio / ffmpeg / blackhole-2ch
     - 创建隔离的 .venv-test 虚拟环境
     - 安装依赖并预下载 SenseVoice / Argos 模型
     - 运行单元测试
-    - 运行限定秒数的端到端 demo
-    - 打包日志和环境信息
+    - 运行限定秒数的端到端 demo，并自动录屏
+    - 打包日志、录屏和环境信息
     - 清理所有测试产物
 """
 
@@ -26,6 +28,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import time
 import zipfile
 from datetime import datetime
 from pathlib import Path
@@ -62,6 +65,8 @@ ARGOS_PAIRS = [
 # Tests to skip in headless / Docker mode
 HEADLESS_SKIPS = ["test_ui.py", "test_audio_capture.py"]
 
+DEFAULT_DEMO_DURATION = 30
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -74,6 +79,7 @@ def colored(text: str, color: str) -> str:
         "yellow": "\033[93m",
         "red": "\033[91m",
         "blue": "\033[94m",
+        "cyan": "\033[96m",
         "reset": "\033[0m",
     }
     if os.environ.get("NO_COLOR"):
@@ -149,11 +155,94 @@ def run(
         )
 
 
+def command_exists(name: str) -> bool:
+    return shutil.which(name) is not None
+
+
 def check_python_version():
     version = sys.version_info
     if version.major < 3 or (version.major == 3 and version.minor < 10):
-        fail(f"需要 Python 3.10+，当前为 {version.major}.{version.minor}.{version.micro}")
+        fail(
+            f"需要 Python 3.10+，当前为 {version.major}.{version.minor}.{version.micro}\n"
+            "请安装 Python 3.10+：brew install python@3.11"
+        )
     log(f"Python 版本符合要求：{version.major}.{version.minor}.{version.micro}", "green")
+
+
+def check_homebrew() -> bool:
+    if command_exists("brew"):
+        log("Homebrew 已安装", "green")
+        return True
+    log("Homebrew 未安装", "red")
+    log("请访问 https://brew.sh 安装，然后重新运行本脚本", "yellow")
+    return False
+
+
+def check_macos():
+    if platform.system() != "Darwin":
+        fail("端到端 demo 和自动录屏目前仅支持 macOS")
+
+
+def blackhole_installed() -> bool:
+    return Path("/Library/Audio/Plug-Ins/HAL/BlackHole2ch.driver").exists()
+
+
+def install_brew_package(pkg: str):
+    log(f"安装 {pkg} ...", "yellow")
+    result = run(["brew", "install", pkg], timeout=600)
+    if result.returncode != 0:
+        fail(f"{pkg} 安装失败，请手动运行：brew install {pkg}")
+    log(f"{pkg} 安装完成", "green")
+
+
+def ensure_brew_packages():
+    needed = []
+    if not command_exists("ffmpeg"):
+        needed.append("ffmpeg")
+    # portaudio is a library; check via pkg-config or brew list
+    try:
+        subprocess.run(["pkg-config", "--exists", "portaudio"], check=True)
+    except Exception:
+        needed.append("portaudio")
+
+    for pkg in needed:
+        install_brew_package(pkg)
+
+    if not blackhole_installed():
+        log("BlackHole 2ch 未安装，尝试自动安装 ...", "yellow")
+        install_brew_package("blackhole-2ch")
+        if not blackhole_installed():
+            fail("BlackHole 2ch 安装后仍未检测到，请重启或手动安装")
+    else:
+        log("BlackHole 2ch 已安装", "green")
+
+
+def prompt_audio_routing():
+    log("=" * 60, "cyan")
+    log("音频路由检查", "cyan")
+    log("=" * 60, "cyan")
+    log("shadow_fiend 需要把播放器声音同时输出到 BlackHole 2ch。", "yellow")
+    log("请按以下步骤配置（只需一次）：", "yellow")
+    log("1. 打开 Audio MIDI Setup（/Applications/Utilities/Audio MIDI Setup.app）", "yellow")
+    log("2. 点击左下角 + → 创建多输出设备", "yellow")
+    log("3. 同时勾选你的扬声器/耳机 和 BlackHole 2ch", "yellow")
+    log("4. 在系统设置 → 声音 → 输出中，选择这个多输出设备", "yellow")
+    log("=" * 60, "cyan")
+
+
+def detect_default_output_contains_blackhole() -> bool:
+    """Try to detect if BlackHole is part of the current default output."""
+    try:
+        result = subprocess.run(
+            ["system_profiler", "SPAudioDataType", "-xml"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True,
+            timeout=10,
+        )
+        return "BlackHole" in result.stdout
+    except Exception:
+        return False
 
 
 # ---------------------------------------------------------------------------
@@ -162,26 +251,43 @@ def check_python_version():
 
 
 def cmd_setup(args: argparse.Namespace):
-    log("==> 步骤 1/4：检查环境", "yellow")
+    log("==> 步骤 1/5：检查环境", "yellow")
     check_python_version()
+    check_macos()
+    if not check_homebrew():
+        fail("Homebrew 是必要依赖")
 
-    if platform.system() != "Darwin":
-        log("警告：非 macOS 系统，端到端 demo 可能无法运行音频捕获", "yellow")
+    log("==> 步骤 2/5：安装系统依赖", "yellow")
+    ensure_brew_packages()
 
-    log("==> 步骤 2/4：创建隔离虚拟环境 .venv-test", "yellow")
+    log("==> 步骤 3/5：音频路由提示", "yellow")
+    prompt_audio_routing()
+    if not detect_default_output_contains_blackhole():
+        log("未能确认 BlackHole 已加入当前默认输出", "yellow")
+        log("如果你已配置好多输出设备，可继续；否则请先配置", "yellow")
+        if not os.environ.get("SHADOW_FIEND_SKIP_CONFIRM"):
+            try:
+                input("已配置好？按回车继续，或 Ctrl+C 退出：")
+            except KeyboardInterrupt:
+                print()
+                sys.exit(0)
+    else:
+        log("检测到当前输出包含 BlackHole", "green")
+
+    log("==> 步骤 4/5：创建隔离虚拟环境 .venv-test", "yellow")
     if VENV_DIR.exists():
         log(".venv-test 已存在，跳过创建")
     else:
         run([sys.executable, "-m", "venv", str(VENV_DIR)])
         log("虚拟环境创建完成", "green")
 
-    log("==> 步骤 3/4：安装 Python 依赖", "yellow")
+    log("==> 步骤 5/5：安装 Python 依赖", "yellow")
     pip = get_venv_pip()
     run([str(pip), "install", "--upgrade", "pip"], timeout=120)
     run([str(pip), "install", "-r", "requirements.txt"], timeout=600)
     log("依赖安装完成", "green")
 
-    log("==> 步骤 4/4：预下载模型", "yellow")
+    log("==> 预下载模型", "yellow")
     _download_models()
     log("模型预下载完成", "green")
 
@@ -270,10 +376,31 @@ def cmd_test(args: argparse.Namespace):
 
 
 def cmd_demo(args: argparse.Namespace):
-    duration = args.duration or 60
+    duration = args.duration or DEFAULT_DEMO_DURATION
     log(f"==> 运行端到端 demo（{duration} 秒后自动退出）", "yellow")
     if not VENV_DIR.exists():
         fail("虚拟环境不存在，请先运行：python scripts/test_runner.py setup")
+
+    if platform.system() != "Darwin":
+        fail("端到端 demo 目前仅支持 macOS")
+
+    recording_path = ensure_logs_dir() / f"demo_recording_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mov"
+    log(f"录屏文件：{recording_path}", "cyan")
+    log("第一次录屏需要授权屏幕录制权限，请按系统提示操作", "yellow")
+
+    # Start screen recording.
+    screen_recorder = subprocess.Popen(
+        ["screencapture", "-v", "-t", "mov", "-C", str(recording_path)],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+    # Give screencapture a moment to initialize.
+    time.sleep(2)
+
+    if screen_recorder.poll() is not None:
+        _, stderr = screen_recorder.communicate()
+        fail(f"录屏启动失败：{stderr or '未知错误'}，请检查屏幕录制权限")
 
     python = get_venv_python()
     cmd = [
@@ -296,22 +423,36 @@ def cmd_demo(args: argparse.Namespace):
 
     with open(log_file, "w", encoding="utf-8") as fh:
         fh.write(f"# demo {' '.join(cmd)}\n\n")
-        process = subprocess.Popen(
+        demo_process = subprocess.Popen(
             cmd,
             cwd=PROJECT_ROOT,
             env={**os.environ, **env},
             stdout=fh,
             stderr=subprocess.STDOUT,
         )
+
         try:
-            process.wait(timeout=duration + 30)
+            demo_process.wait(timeout=duration + 30)
         except subprocess.TimeoutExpired:
             log("demo 未能在预期时间内结束，强制终止", "yellow")
-            process.terminate()
+            demo_process.terminate()
             try:
-                process.wait(timeout=10)
+                demo_process.wait(timeout=10)
             except subprocess.TimeoutExpired:
-                process.kill()
+                demo_process.kill()
+
+    # Stop recording.
+    log("停止录屏...", "blue")
+    screen_recorder.terminate()
+    try:
+        screen_recorder.wait(timeout=10)
+    except subprocess.TimeoutExpired:
+        screen_recorder.kill()
+
+    if recording_path.exists() and recording_path.stat().st_size > 0:
+        log(f"录屏已保存：{recording_path}", "green")
+    else:
+        log("警告：录屏文件为空或不存在，可能需要屏幕录制权限", "yellow")
 
     log("demo 结束", "green")
 
@@ -341,7 +482,7 @@ def cmd_logs(args: argparse.Namespace):
         result = run([str(pip), "list"], capture=True)
         (report_dir / "pip_list.txt").write_text(result.stdout or "", encoding="utf-8")
 
-    # Copy logs
+    # Copy logs (including screen recordings)
     logs_dest = report_dir / "logs"
     if LOGS_DIR.exists() and any(LOGS_DIR.iterdir()):
         shutil.copytree(LOGS_DIR, logs_dest)
@@ -421,27 +562,31 @@ def main():
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    subparsers.add_parser("setup", help="创建隔离环境并下载模型")
+    subparsers.add_parser("setup", help="检测环境并安装依赖")
 
     test_parser = subparsers.add_parser("test", help="运行单元测试")
     test_parser.add_argument("--headless", action="store_true", help="跳过 GUI/音频测试")
 
-    demo_parser = subparsers.add_parser("demo", help="运行端到端 demo")
-    demo_parser.add_argument("--duration", type=int, default=60, help="运行秒数（默认 60）")
+    demo_parser = subparsers.add_parser("demo", help="运行端到端 demo 并自动录屏")
+    demo_parser.add_argument("--duration", type=int, default=DEFAULT_DEMO_DURATION, help="运行秒数（默认 30）")
     demo_parser.add_argument("--source", default="ja", help="源语言（默认 ja）")
     demo_parser.add_argument("--target", default="zh", help="目标语言（默认 zh）")
 
-    subparsers.add_parser("logs", help="打包测试日志")
+    subparsers.add_parser("logs", help="打包测试日志和录屏")
     subparsers.add_parser("cleanup", help="删除测试环境与产物")
 
     all_parser = subparsers.add_parser("all", help="一键执行 setup→test→demo→logs→cleanup")
-    all_parser.add_argument("--duration", type=int, default=60, help="demo 运行秒数（默认 60）")
+    all_parser.add_argument("--duration", type=int, default=DEFAULT_DEMO_DURATION, help="demo 运行秒数（默认 30）")
     all_parser.add_argument("--source", default="ja", help="源语言（默认 ja）")
     all_parser.add_argument("--target", default="zh", help="目标语言（默认 zh）")
     all_parser.add_argument("--no-cleanup", action="store_true", help="保留测试环境")
     all_parser.add_argument("--headless", action="store_true", help="单元测试跳过 GUI/音频")
+    all_parser.add_argument("--yes", action="store_true", help="跳过音频路由确认提示")
 
     args = parser.parse_args()
+
+    if getattr(args, "yes", False):
+        os.environ["SHADOW_FIEND_SKIP_CONFIRM"] = "1"
 
     commands = {
         "setup": cmd_setup,
