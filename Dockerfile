@@ -13,6 +13,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies:
 # - libportaudio2: PyAudio runtime
+# - libportaudio-dev + build-essential: compile PyAudio wheel from source
+# - python3-dev: Python headers for building native extensions
 # - libsndfile1: audio file I/O
 # - libgl1 / libglib2.0-0 / libxkbcommon-x11-0: Qt6 runtime
 # - libgomp1: OpenMP for some ML libs
@@ -20,6 +22,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 # - xvfb: headless display for GUI/CI tests
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libportaudio2 \
+    libportaudio-dev \
+    build-essential \
+    python3-dev \
     libsndfile1 \
     libgl1 \
     libglib2.0-0 \
