@@ -38,14 +38,53 @@
 ```bash
 git clone https://github.com/YOUR_USERNAME/yimu.git
 cd yimu
-./scripts/setup.sh        # 安装依赖、BlackHole、portaudio
+./scripts/setup.sh        # 安装依赖、BlackHole、portaudio、ffmpeg
 ./scripts/run.sh --source ja --target zh
 ```
 
-> 注意：首次运行前需要在 **Audio MIDI Setup** 中创建一个 Multi-Output Device，
-> 同时勾选你的扬声器/耳机和 **BlackHole 2ch**，并将其设为系统输出。
+### macOS 音频路由设置
 
-> 详细文档待 MVE 完成后补充。
+首次运行前，需要在 **Audio MIDI Setup** 中创建一个 Multi-Output Device：
+1. 打开 `/Applications/Utilities/Audio MIDI Setup.app`
+2. 点击左下角 `+` → **Create Multi-Output Device**
+3. 同时勾选你的扬声器/耳机和 **BlackHole 2ch**
+4. 在系统设置中将该 Multi-Output Device 设为默认输出
+
+这样你既能听到视频声音，YiMu 也能从 BlackHole 捕获到音频。
+
+## 开发状态
+
+YiMu 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
+- ✅ 音频捕获
+- ✅ VAD 切句
+- ✅ SenseVoice ASR
+- ✅ Argos 翻译
+- ✅ PyQt6 字幕浮窗
+- ✅ 端到端 pipeline
+
+端到端实时演示需要在配备 Python 3.10+ 和 Homebrew 的 macOS 环境上验证。
+
+## 运行测试
+
+```bash
+./.venv/bin/python -m pytest tests/ -v
+```
+
+## 模块测试
+
+```bash
+# 测试音频捕获（需配置 BlackHole）
+./scripts/test_capture.py
+
+# 测试 ASR（首次运行会下载 SenseVoice 模型）
+./scripts/test_asr.py path/to/audio.wav
+
+# 测试翻译
+./scripts/test_translation.py --source en --target zh "Hello world"
+
+# 测试 UI
+./scripts/test_ui.py
+```
 
 ## 项目结构
 
