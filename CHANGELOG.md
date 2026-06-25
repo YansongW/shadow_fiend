@@ -39,3 +39,18 @@ shadow_fiend 首个 MVE 版本。
 ### Verified
 - 单元测试 15/15 通过（见 `test` 分支）。
 - 端到端 demo 跑通：通过 BlackHole 2ch 捕获日语/韩语测试音频，经 SenseVoice 识别、Argos 翻译后输出中文字幕。
+
+## [Unreleased]
+
+### Added
+- CLI 新增 VAD 参数：`--max-utterance-ms`、`--min-silence-ms`、`--min-speech-ms`。
+- 字幕样式设置面板：右键浮窗可调整原/译文字号、颜色、背景透明度与窗口位置。
+- 右键菜单支持导出 SRT 字幕文件。
+- 窗口位置记忆：拖拽浮窗后自动记住自定义位置。
+- 右键菜单支持切换点击穿透模式。
+
+### Changed
+- 默认 VAD 参数调整为更低延迟：`max_utterance_ms=5000`、`min_silence_ms=350`、`min_speech_ms=200`。
+
+### Fixed
+- 字幕浮窗右键菜单与点击穿透的稳定性。
