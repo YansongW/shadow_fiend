@@ -7,7 +7,25 @@ echo "==> YiMu setup script for macOS"
 
 # Check Python version
 python_version=$(python3 --version 2>&1 | awk '{print $2}')
+major=$(echo "$python_version" | cut -d. -f1)
+minor=$(echo "$python_version" | cut -d. -f2)
+
 echo "Python version: $python_version"
+if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 10 ]; }; then
+    echo "WARNING: YiMu recommends Python 3.10 or newer."
+    echo "Current version ($python_version) may not work with some dependencies."
+    echo "Please install Python 3.10+ via https://www.python.org or Homebrew."
+fi
+
+# Check Homebrew
+if ! command -v brew &> /dev/null; then
+    echo "ERROR: Homebrew is required. Please install it first: https://brew.sh"
+    exit 1
+fi
+
+# Install system dependencies
+echo "==> Installing system dependencies via Homebrew..."
+brew install portaudio blackhole-2ch
 
 # Create virtual environment
 if [ ! -d ".venv" ]; then
@@ -23,16 +41,13 @@ echo "==> Installing Python dependencies..."
 # Check BlackHole
 echo "==> Checking BlackHole audio driver..."
 if [ ! -d "/Library/Audio/Plug-Ins/HAL/BlackHole2ch.driver" ]; then
-    echo "BlackHole 2ch not found. Installing via Homebrew..."
-    if ! command -v brew &> /dev/null; then
-        echo "ERROR: Homebrew not found. Please install Homebrew first: https://brew.sh"
-        exit 1
-    fi
-    brew install blackhole-2ch
-    echo "Please restart your Mac or run: sudo killall coreaudiod"
-else
-    echo "BlackHole 2ch is already installed."
+    echo "ERROR: BlackHole 2ch installation seems to have failed."
+    exit 1
 fi
 
+echo ""
 echo "==> Setup complete."
+echo "IMPORTANT: Please configure a Multi-Output Device in Audio MIDI Setup"
+echo "           so that both your speakers and BlackHole 2ch receive audio."
+echo ""
 echo "To start YiMu, run: ./scripts/run.sh"

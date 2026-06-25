@@ -26,9 +26,26 @@
 - **翻译**：Argos Translate / LibreTranslate（本地轻量），可选本地 LLM
 - **音频捕获**：BlackHole 虚拟声卡 / ScreenCaptureKit
 
+## 前置要求
+
+- macOS 12+（MVE 阶段仅支持 Apple Silicon）
+- Python 3.10+
+- Homebrew
+- BlackHole 2ch 虚拟声卡（setup.sh 会自动安装）
+
 ## 快速开始
 
-> 待 MVE 完成后补充。
+```bash
+git clone https://github.com/YOUR_USERNAME/yimu.git
+cd yimu
+./scripts/setup.sh        # 安装依赖、BlackHole、portaudio
+./scripts/run.sh --source ja --target zh
+```
+
+> 注意：首次运行前需要在 **Audio MIDI Setup** 中创建一个 Multi-Output Device，
+> 同时勾选你的扬声器/耳机和 **BlackHole 2ch**，并将其设为系统输出。
+
+> 详细文档待 MVE 完成后补充。
 
 ## 项目结构
 
