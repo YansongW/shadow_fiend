@@ -1,5 +1,5 @@
 """
-YingMo 主流程编排模块。
+Shadow Fiend 主流程编排模块。
 
 把音频捕获、VAD、ASR、翻译、UI 串成一个实时 pipeline。
 """
@@ -66,7 +66,7 @@ class TranslationPipeline:
         if self._running:
             return
 
-        logger.info("Starting YingMo translation pipeline")
+        logger.info("Starting Shadow Fiend translation pipeline")
         self._running = True
 
         # Initialize modules.
@@ -180,7 +180,7 @@ class TranslationPipeline:
 
     def stop(self) -> None:
         """停止 pipeline。"""
-        logger.info("Stopping YingMo translation pipeline")
+        logger.info("Stopping Shadow Fiend translation pipeline")
         self._running = False
 
         if self._timer is not None:

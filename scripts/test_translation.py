@@ -16,13 +16,13 @@ from translation.argos_engine import TranslationModule
 
 
 def main():
-    parser = argparse.ArgumentParser(description="YingMo translation test")
+    parser = argparse.ArgumentParser(description="Shadow Fiend translation test")
     parser.add_argument("text", help="Text to translate")
     parser.add_argument("--source", default="en", help="Source language")
     parser.add_argument("--target", default="zh", help="Target language")
     args = parser.parse_args()
 
-    print("YingMo translation test")
+    print("Shadow Fiend translation test")
     print("=" * 40)
 
     translator = TranslationModule(args.source, args.target)

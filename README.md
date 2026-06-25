@@ -1,4 +1,4 @@
-# YingMo（影魔）
+# Shadow Fiend
 
 > 一个开源、免费、本地优先的实时字幕翻译器。
 > 专注于中日韩影视剧，无需官方字幕也能看懂。
@@ -36,8 +36,8 @@
 ## 快速开始
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/yimu.git
-cd yimu
+git clone https://github.com/YansongW/Local_Translation.git
+cd Local_Translation
 ./scripts/setup.sh        # 安装依赖、BlackHole、portaudio、ffmpeg
 ./scripts/run.sh --source ja --target zh
 ```
@@ -50,11 +50,11 @@ cd yimu
 3. 同时勾选你的扬声器/耳机和 **BlackHole 2ch**
 4. 在系统设置中将该 Multi-Output Device 设为默认输出
 
-这样你既能听到视频声音，YingMo 也能从 BlackHole 捕获到音频。
+这样你既能听到视频声音，Shadow Fiend 也能从 BlackHole 捕获到音频。
 
 ## 开发状态
 
-YingMo 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
+Shadow Fiend 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
 - ✅ 音频捕获
 - ✅ VAD 切句
 - ✅ SenseVoice ASR
@@ -85,6 +85,10 @@ YingMo 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
 # 测试 UI
 ./scripts/test_ui.py
 ```
+
+## 商标声明
+
+"Shadow Fiend" 是 Valve Corporation 旗下 Dota 2 中的角色名。本项目是独立的开源字幕翻译工具，与 Valve Corporation 或 Dota 2 无任何关联、认可或赞助关系。本项目名称仅作为对游戏文化的致敬使用。
 
 ## 项目结构
 
