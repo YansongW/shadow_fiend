@@ -28,6 +28,8 @@ def main():
     parser.add_argument("--vad-min-speech-ms", type=int, default=150, help="Min speech length to form utterance in ms (default 150)")
     parser.add_argument("--asr-window-ms", type=int, default=500, help="Streaming ASR window in ms (default 500)")
     parser.add_argument("--asr-hop-ms", type=int, default=200, help="Streaming ASR hop in ms (default 200)")
+    parser.add_argument("--denoise", action="store_true", default=True, help="Enable RNNoise denoising (default True)")
+    parser.add_argument("--no-denoise", action="store_true", help="Disable RNNoise denoising")
     parser.add_argument("--compact", action="store_true", help="Show only translated text")
     parser.add_argument(
         "--duration",
@@ -43,6 +45,8 @@ def main():
         print(f"测试模式：{args.duration} 秒后自动退出")
     print("按 Ctrl+C 退出")
 
+    denoise_enabled = args.denoise and not args.no_denoise
+
     pipeline = StreamingTranslationPipeline(
         source_lang=args.source,
         target_lang=args.target,
@@ -56,6 +60,7 @@ def main():
         vad_min_speech_ms=args.vad_min_speech_ms,
         asr_window_ms=args.asr_window_ms,
         asr_hop_ms=args.asr_hop_ms,
+        denoise_enabled=denoise_enabled,
     )
 
     timer = None

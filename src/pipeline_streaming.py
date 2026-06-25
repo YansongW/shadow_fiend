@@ -15,6 +15,7 @@ from typing import Optional
 import numpy as np
 
 from audio.capture import AudioCaptureModule
+from audio.denoiser import RNNoiseDenoiser
 from audio.silero_vad import SileroVADModule
 from asr.streaming_sensevoice import StreamingSenseVoiceASR
 from translation.argos_engine import TranslationModule
@@ -51,6 +52,7 @@ class StreamingTranslationPipeline:
         vad_max_utterance_ms: int = 5000,
         asr_window_ms: int = 500,
         asr_hop_ms: int = 200,
+        denoise_enabled: bool = True,
     ):
         self.source_lang = source_lang
         self.target_lang = target_lang
@@ -66,6 +68,7 @@ class StreamingTranslationPipeline:
         self.vad_max_utterance_ms = vad_max_utterance_ms
         self.asr_window_ms = asr_window_ms
         self.asr_hop_ms = asr_hop_ms
+        self.denoise_enabled = denoise_enabled
 
         self._running = False
         self._audio_thread: Optional[threading.Thread] = None
@@ -76,6 +79,7 @@ class StreamingTranslationPipeline:
         self._subtitle_history: list[dict] = []
 
         self._capture: Optional[AudioCaptureModule] = None
+        self._denoiser: Optional[RNNoiseDenoiser] = None
         self._vad: Optional[SileroVADModule] = None
         self._asr: Optional[StreamingSenseVoiceASR] = None
         self._translator: Optional[TranslationModule] = None
@@ -93,6 +97,10 @@ class StreamingTranslationPipeline:
             device_name=self.device_name,
             sample_rate=self.sample_rate,
             chunk_duration_ms=self.chunk_duration_ms,
+        )
+        self._denoiser = RNNoiseDenoiser(
+            sample_rate=self.sample_rate,
+            enabled=self.denoise_enabled,
         )
         self._vad = SileroVADModule(
             sample_rate=self.sample_rate,
@@ -117,6 +125,7 @@ class StreamingTranslationPipeline:
             compact=self.compact,
         )
         self._ui.set_export_srt_callback(self.export_srt)
+        self._ui.on_toggle_denoise = self._toggle_denoise
 
         self._capture.start()
 
@@ -160,6 +169,10 @@ class StreamingTranslationPipeline:
                 continue
 
             try:
+                # Denoise before VAD/ASR when enabled.
+                if self._denoiser is not None:
+                    chunk = self._denoiser.process_chunk(chunk)
+
                 was_speaking = self._vad._is_speaking
                 utterances = self._vad.add_audio(chunk)
                 is_speaking = self._vad._is_speaking
@@ -215,6 +228,15 @@ class StreamingTranslationPipeline:
         })
         self._subtitle_queue.put((source_text, translated_text))
 
+    def _toggle_denoise(self) -> None:
+        """切换降噪开关。"""
+        self.denoise_enabled = not self.denoise_enabled
+        if self._denoiser is not None:
+            self._denoiser.enabled = self.denoise_enabled
+        if self._ui is not None:
+            self._ui.set_denoise(self.denoise_enabled)
+        logger.info("Denoise %s", "enabled" if self.denoise_enabled else "disabled")
+
     def _update_ui(self) -> None:
         """从字幕队列取出结果并更新 UI。"""
         while not self._subtitle_queue.empty():
@@ -266,7 +288,15 @@ class StreamingTranslationPipeline:
         if self._process_thread is not None:
             self._process_thread.join(timeout=2)
 
-        # Finalize any trailing speech before tearing down.
+        # Flush denoiser and finalize any trailing speech before tearing down.
+        if self._denoiser is not None:
+            try:
+                tail = self._denoiser.flush()
+                if len(tail) > 0 and self._vad is not None:
+                    self._vad.add_audio(tail)
+            except Exception as e:
+                logger.error("Denoiser flush error: %s", e)
+
         if self._asr is not None and self._vad is not None and self._vad._is_speaking:
             try:
                 final_result = self._asr.finalize(language=self.source_lang)

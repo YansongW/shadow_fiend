@@ -52,6 +52,7 @@ class SubtitleWindow:
 
         # Callbacks set by the pipeline.
         self.on_toggle_listening: Optional[callable] = None
+        self.on_toggle_denoise: Optional[callable] = None
         self.on_export_srt_request: Optional[callable] = None
 
     def _ensure_qt(self):
@@ -135,6 +136,7 @@ class SubtitleWindow:
         self._tray = TrayController(
             parent=self._window,
             on_toggle_listening=self._toggle_listening,
+            on_toggle_denoise=self._toggle_denoise,
             on_style_settings=self._open_style_dialog,
             on_export_srt=self._export_srt,
             on_position_top=lambda: self._set_position("top"),
@@ -236,6 +238,16 @@ class SubtitleWindow:
         if self.on_toggle_listening:
             self.on_toggle_listening(self._listening)
         logger.info("Listening %s", "enabled" if self._listening else "paused")
+
+    def _toggle_denoise(self) -> None:
+        """切换降噪开关（由托盘调用）。"""
+        if self.on_toggle_denoise:
+            self.on_toggle_denoise()
+
+    def set_denoise(self, enabled: bool) -> None:
+        """更新托盘菜单中的降噪状态显示。"""
+        if self._tray is not None:
+            self._tray.set_denoise(enabled)
 
     def _export_srt(self):
         """弹出文件对话框并导出 SRT 字幕文件。"""

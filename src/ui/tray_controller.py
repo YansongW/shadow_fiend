@@ -22,6 +22,7 @@ class TrayController:
         self,
         parent,
         on_toggle_listening: Optional[Callable[[], None]] = None,
+        on_toggle_denoise: Optional[Callable[[], None]] = None,
         on_style_settings: Optional[Callable[[], None]] = None,
         on_export_srt: Optional[Callable[[], None]] = None,
         on_position_top: Optional[Callable[[], None]] = None,
@@ -33,6 +34,7 @@ class TrayController:
     ):
         self._parent = parent
         self._on_toggle_listening = on_toggle_listening
+        self._on_toggle_denoise = on_toggle_denoise
         self._on_style_settings = on_style_settings
         self._on_export_srt = on_export_srt
         self._on_position_top = on_position_top
@@ -101,6 +103,11 @@ class TrayController:
         """构建托盘菜单。"""
         self._toggle_action = self._menu.addAction("暂停监听")
         self._toggle_action.triggered.connect(self._handle_toggle_listening)
+
+        self._denoise_action = self._menu.addAction("降噪")
+        self._denoise_action.setCheckable(True)
+        self._denoise_action.setChecked(True)
+        self._denoise_action.triggered.connect(self._handle_toggle_denoise)
         self._menu.addSeparator()
 
         self._style_action = self._menu.addAction("字幕样式...")
@@ -140,6 +147,10 @@ class TrayController:
     def _handle_toggle_listening(self) -> None:
         if self._on_toggle_listening:
             self._on_toggle_listening()
+
+    def _handle_toggle_denoise(self) -> None:
+        if self._on_toggle_denoise:
+            self._on_toggle_denoise()
 
     def _handle_style_settings(self) -> None:
         if self._on_style_settings:
@@ -186,6 +197,11 @@ class TrayController:
         self._listening = listening
         if self._toggle_action is not None:
             self._toggle_action.setText("暂停监听" if listening else "开始监听")
+
+    def set_denoise(self, enabled: bool) -> None:
+        """更新托盘菜单中的降噪状态。"""
+        if self._denoise_action is not None:
+            self._denoise_action.setChecked(enabled)
 
     def set_click_through(self, enabled: bool) -> None:
         """更新托盘菜单中的点击穿透状态。"""
