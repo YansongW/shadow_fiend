@@ -1,0 +1,23 @@
+# YiMu core dependencies
+# MVE stage: keep it minimal.
+
+# Audio
+pyaudio>=0.2.14
+numpy>=1.26.0
+
+# ASR
+funasr>=1.1.0
+torch>=2.3.0
+torchaudio>=2.3.0
+
+# Translation
+argostranslate>=1.9.6
+
+# UI
+PyQt6>=6.7.0
+
+# Utilities
+requests>=2.32.0
+
+# Dev
+pytest>=8.2.0

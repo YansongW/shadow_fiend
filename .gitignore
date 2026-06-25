@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.eggs/
+dist/
+build/
+*.log
+
+# Virtual environments
+venv/
+.env/
+.venv/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Models and caches
+models/
+cache/
+*.gguf
+*.onnx
+*.pt
+*.bin
+
+# YiMu specific
+sessions/
+downloads/
+
+# Secrets
+.env
+*.key
