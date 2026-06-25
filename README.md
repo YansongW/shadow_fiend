@@ -29,7 +29,7 @@
 ## 前置要求
 
 - macOS 12+（MVE 阶段仅支持 Apple Silicon）
-- Python 3.10+
+- **Python 3.10+**（必须，因为 Argos Translate / Stanza 等依赖要求）
 - Homebrew
 - BlackHole 2ch 虚拟声卡（setup.sh 会自动安装）
 

@@ -12,9 +12,11 @@ minor=$(echo "$python_version" | cut -d. -f2)
 
 echo "Python version: $python_version"
 if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 10 ]; }; then
-    echo "WARNING: YiMu recommends Python 3.10 or newer."
-    echo "Current version ($python_version) may not work with some dependencies."
-    echo "Please install Python 3.10+ via https://www.python.org or Homebrew."
+    echo "ERROR: YiMu requires Python 3.10 or newer."
+    echo "Current version ($python_version) is not supported."
+    echo "Please install Python 3.10+ via https://www.python.org or Homebrew:"
+    echo "    brew install python@3.11"
+    exit 1
 fi
 
 # Check Homebrew
