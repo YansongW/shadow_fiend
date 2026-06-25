@@ -99,13 +99,37 @@ python scripts/test_runner.py logs      # zip 보고서 패키징
 python scripts/test_runner.py cleanup   # .venv-test, 로그, 모델 삭제
 ```
 
-### Docker(헤드리스 단위 테스트 전용)
+### Docker
+
+**GitHub Packages**에 재현 가능한 개발 및 헤드리스 테스트용 이미지가 게시되어 있습니다:
 
 ```bash
-./scripts/test_in_docker.sh
+docker pull ghcr.io/yansongw/shadow_fiend:latest
 ```
 
-> Docker는 macOS 오디오 하드웨어와 GUI에 접근할 수 없으므로 GUI/오디오가 필요 없는 단위 테스트만 실행합니다. 엔드투엔드 demo는 macOS + BlackHole 2ch가 필요합니다.
+#### 헤드리스 / CI 사용법
+
+```bash
+docker run --rm ghcr.io/yansongw/shadow_fiend:latest --help
+```
+
+#### GUI 사용법 (X11 포워딩)
+
+> Docker에서 GUI를 실행하는 것은 선택 사항이며, 일상적인 영화 시청은 로컬 설치를 권장합니다.
+
+```bash
+# macOS: XQuartz 연결 허용
+xhost +localhost
+
+# X11 소켓을 전달하여 실행
+docker run --rm -e DISPLAY=host.docker.internal:0 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  ghcr.io/yansongw/shadow_fiend:latest --source ko --target zh
+```
+
+이 이미지는 멀티 플랫폼(`linux/amd64`, `linux/arm64`)을 지원하며, [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml)을 통해 GitHub Release가 생성될 때마다 자동으로 빌드 및 게시됩니다.
+
+> Docker는 macOS 오디오 하드웨어에 직접 접근할 수 없으므로 엔드투엔드 demo는 macOS + BlackHole 2ch가 필요합니다.
 
 ## 테스트
 

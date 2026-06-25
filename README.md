@@ -89,6 +89,36 @@ End-to-end live demo verified on macOS Apple Silicon + BlackHole 2ch.
 
 > **Testing code** is maintained on the [`test`](https://github.com/YansongW/shadow_fiend/tree/test) branch. See [`ROADMAP.md`](ROADMAP.md) for planned improvements.
 
+## Docker
+
+A Docker image is published to **GitHub Packages** for reproducible development and headless testing:
+
+```bash
+docker pull ghcr.io/yansongw/shadow_fiend:latest
+```
+
+### Headless / CI usage
+
+```bash
+docker run --rm ghcr.io/yansongw/shadow_fiend:latest --help
+```
+
+### GUI usage (X11 forwarding on macOS/Linux)
+
+> GUI mode in Docker is optional. Native installation is recommended for daily watching.
+
+```bash
+# macOS: allow XQuartz connections
+xhost +localhost
+
+# Run with X11 socket forwarded
+docker run --rm -e DISPLAY=host.docker.internal:0 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  ghcr.io/yansongw/shadow_fiend:latest --source ja --target zh
+```
+
+The image is multi-platform (`linux/amd64`, `linux/arm64`) and is built automatically on every GitHub Release via [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml).
+
 ## macOS 双击运行
 
 针对 v0.0.1 发布包，项目根目录提供两个 `.command` 脚本：

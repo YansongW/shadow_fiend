@@ -99,13 +99,37 @@ python scripts/test_runner.py logs      # 打包报告 zip
 python scripts/test_runner.py cleanup   # 删除 .venv-test、日志、模型
 ```
 
-### Docker（仅无 GUI 单元测试）
+### Docker
+
+镜像已发布到 **GitHub Packages**，用于可复现的开发和无 GUI 测试：
 
 ```bash
-./scripts/test_in_docker.sh
+docker pull ghcr.io/yansongw/shadow_fiend:latest
 ```
 
-> Docker 无法访问 macOS 音频硬件和 GUI，因此只运行非 GUI/非音频单元测试。端到端 demo 仍需 macOS + BlackHole 2ch。
+#### 无界面 / CI 用法
+
+```bash
+docker run --rm ghcr.io/yansongw/shadow_fiend:latest --help
+```
+
+#### GUI 用法（X11 转发）
+
+> Docker 中运行 GUI 为可选项，日常观影仍建议使用本地安装。
+
+```bash
+# macOS：允许 XQuartz 连接
+xhost +localhost
+
+# 转发 X11 socket 运行
+docker run --rm -e DISPLAY=host.docker.internal:0 \
+  -v /tmp/.X11-unix:/tmp/.X11-unix \
+  ghcr.io/yansongw/shadow_fiend:latest --source ja --target zh
+```
+
+该镜像支持多平台（`linux/amd64`、`linux/arm64`），并通过 [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml) 在每次 GitHub Release 时自动构建发布。
+
+> Docker 无法直接访问 macOS 音频硬件，端到端 demo 仍需 macOS + BlackHole 2ch。
 
 ## 运行测试
 
