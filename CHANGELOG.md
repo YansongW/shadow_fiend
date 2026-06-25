@@ -1,6 +1,8 @@
 # Changelog
 
-## [Unreleased]
+## [0.0.1] - 2026-06-25
+
+shadow_fiend 首个 MVE 版本。
 
 ### Added
 - 项目初始化：创建 shadow_fiend项目骨架。
@@ -28,7 +30,12 @@
 
 ### Added
 - CLI 新增 `--asr-device` 参数，可显式指定 ASR 推理设备（auto/cpu/cuda/mps）。
+- macOS 双击启动脚本：`安装 shadow_fiend.command`、`启动 shadow_fiend.command`。
+
+### Repository
+- 创建 `test` 分支保留所有测试代码与测试工具。
+- `main` 分支仅保留应用核心代码、脚本与文档，测试相关文件迁移至 `test` 分支。
 
 ### Verified
-- 单元测试 15/15 通过。
+- 单元测试 15/15 通过（见 `test` 分支）。
 - 端到端 demo 跑通：通过 BlackHole 2ch 捕获日语/韩语测试音频，经 SenseVoice 识别、Argos 翻译后输出中文字幕。
