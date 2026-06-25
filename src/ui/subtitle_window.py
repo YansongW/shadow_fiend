@@ -51,7 +51,7 @@ class SubtitleWindow:
             self._app = QtWidgets.QApplication([])
 
         self._window = QtWidgets.QWidget()
-        self._window.setWindowTitle("Shadow Fiend")
+        self._window.setWindowTitle("shadow_fiend")
         self._window.setWindowFlags(
             QtCore.Qt.WindowType.FramelessWindowHint
             | QtCore.Qt.WindowType.WindowStaysOnTopHint

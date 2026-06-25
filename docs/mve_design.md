@@ -1,4 +1,4 @@
-# Shadow Fiend MVE 技术设计文档
+# shadow_fiend MVE 技术设计文档
 
 ## 1. 目标
 

@@ -1,11 +1,11 @@
-# Shadow Fiend — AI 协作指南
+# shadow_fiend — AI 协作指南
 
-本文件是 Kimi Code 等 AI 助手参与 Shadow Fiend 项目时的核心上下文。
+本文件是 Kimi Code 等 AI 助手参与 shadow_fiend 项目时的核心上下文。
 每次会话开始前必须先阅读本文件。
 
 ## 项目定位
 
-- **名称**：Shadow Fiend
+- **名称**：shadow_fiend
 - **定位**：开源、免费、本地优先的实时字幕翻译器，专注中日韩影视剧。
 - **首要平台**：macOS Apple Silicon（MVE 阶段）。
 - **核心原则**：简单、可维护、隐私优先、对非技术用户友好。

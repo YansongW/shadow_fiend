@@ -21,7 +21,7 @@ from audio.capture import AudioCaptureModule
 
 
 def main():
-    print("Shadow Fiend audio capture test")
+    print("shadow_fiend audio capture test")
     print("=" * 40)
 
     try:

@@ -14,20 +14,20 @@
 
 3. 创建仓库并推送：
    ```bash
-   cd /Users/yansong/yimu
-   gh repo create yimu --public --source=. --remote=origin --push
+   cd /Users/yansong/shadow_fiend
+   gh repo create shadow_fiend --public --source=. --remote=origin --push
    ```
 
 ## 方案 B：手动在 GitHub 网页创建
 
 1. 访问 https://github.com/new
-2. Repository name 填 `yimu`
+2. Repository name 填 `shadow_fiend`
 3. 选择 **Public** 和 **Add a README file**（可选）
 4. 点击 **Create repository**
 5. 在本地执行：
    ```bash
-   cd /Users/yansong/yimu
-   git remote add origin https://github.com/YOUR_USERNAME/yimu.git
+   cd /Users/yansong/shadow_fiend
+   git remote add origin https://github.com/YOUR_USERNAME/shadow_fiend.git
    git branch -M main
    git push -u origin main
    ```

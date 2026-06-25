@@ -1,5 +1,5 @@
 """
-Shadow Fiend 入口模块。
+shadow_fiend 入口模块。
 """
 
 import argparse
@@ -15,14 +15,14 @@ logging.basicConfig(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Shadow Fiend — Open real-time subtitle translation")
+    parser = argparse.ArgumentParser(description="shadow_fiend — Open real-time subtitle translation")
     parser.add_argument("--source", default="auto", help="Source language code (e.g. ja, ko, zh, en)")
     parser.add_argument("--target", default="zh", help="Target language code (e.g. zh, en)")
     parser.add_argument("--device", default="BlackHole 2ch", help="Audio input device name")
     parser.add_argument("--compact", action="store_true", help="Show only translated text")
     args = parser.parse_args()
 
-    print(f"Shadow Fiend 启动中...")
+    print(f"shadow_fiend 启动中...")
     print(f"源语言: {args.source}, 目标语言: {args.target}")
     print("按 Ctrl+C 退出")
 
