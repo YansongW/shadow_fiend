@@ -77,6 +77,12 @@ class TranslationPipeline:
         )
         self._vad = VADModule(sample_rate=self.sample_rate)
         self._asr = ASRModule(device="auto")
+        # Pre-load ASR model so the first utterance does not block the
+        # processing thread and overflow the audio queue.
+        logger.info("Pre-loading ASR model...")
+        self._asr._load_model()
+        logger.info("ASR model ready")
+
         self._translator = TranslationModule(
             source_lang=self.source_lang if self.source_lang != "auto" else "en",
             target_lang=self.target_lang,
@@ -184,7 +190,14 @@ class TranslationPipeline:
         self._running = False
 
         if self._timer is not None:
-            self._timer.stop()
+            # QTimer must be stopped from the thread that created it.
+            # Use a queued invocation when stop() is called from a worker thread.
+            if self._ui._QtCore.QThread.currentThread() == self._timer.thread():
+                self._timer.stop()
+            else:
+                self._ui._QtCore.QMetaObject.invokeMethod(
+                    self._timer, "stop", self._ui._QtCore.Qt.ConnectionType.QueuedConnection
+                )
 
         if self._audio_thread is not None:
             self._audio_thread.join(timeout=2)

@@ -5,19 +5,29 @@ cd "$(dirname "$0")/.."
 
 echo "==> shadow_fiend setup script for macOS"
 
-# Check Python version
-python_version=$(python3 --version 2>&1 | awk '{print $2}')
-major=$(echo "$python_version" | cut -d. -f1)
-minor=$(echo "$python_version" | cut -d. -f2)
+# Discover a Python 3.10+ interpreter.
+PYTHON_CMD=""
+for cmd in python3 python3.12 python3.11 python3.10 "$HOME/miniconda3/bin/python" "$HOME/miniconda3/bin/python3" "$HOME/miniconda3/bin/python3.11"; do
+    if command -v "$cmd" &> /dev/null; then
+        version=$("$cmd" --version 2>&1 | awk '{print $2}')
+        major=$(echo "$version" | cut -d. -f1)
+        minor=$(echo "$version" | cut -d. -f2)
+        if [ "$major" -eq 3 ] && [ "$minor" -ge 10 ]; then
+            PYTHON_CMD="$cmd"
+            break
+        fi
+    fi
+done
 
-echo "Python version: $python_version"
-if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 10 ]; }; then
+if [ -z "$PYTHON_CMD" ]; then
     echo "ERROR: shadow_fiend requires Python 3.10 or newer."
-    echo "Current version ($python_version) is not supported."
     echo "Please install Python 3.10+ via https://www.python.org or Homebrew:"
     echo "    brew install python@3.11"
     exit 1
 fi
+
+python_version=$("$PYTHON_CMD" --version 2>&1 | awk '{print $2}')
+echo "Python version: $python_version ($PYTHON_CMD)"
 
 # Check Homebrew
 if ! command -v brew &> /dev/null; then
@@ -32,7 +42,7 @@ brew install portaudio blackhole-2ch ffmpeg
 # Create virtual environment
 if [ ! -d ".venv" ]; then
     echo "==> Creating virtual environment..."
-    python3 -m venv .venv
+    "$PYTHON_CMD" -m venv .venv
 fi
 
 # Install Python dependencies

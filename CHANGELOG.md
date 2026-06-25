@@ -18,7 +18,13 @@
 
 ### Changed
 - setup.sh / README 明确要求 Python 3.10+。
+- setup.sh 自动发现系统中可用的 Python 3.10+ 解释器（含 miniconda3）。
+- run.sh 优先使用 .venv-test 环境，自动设置模型缓存路径，并修复模块导入路径。
 
-### Known Limitations
-- 当前开发环境为 Python 3.9.6，无法安装 Argos Translate 完整依赖。
-- SenseVoice 模型下载在当前网络环境下超时，端到端 demo 需在更合适环境验证。
+### Fixed
+- pipeline 中 ASR 模型延迟加载导致首次 utterance 处理时音频队列溢出的问题；启动时预加载 ASR 模型。
+- Qt timer 跨线程停止警告（`QObject::killTimer: Timers cannot be stopped from another thread`）。
+
+### Verified
+- 单元测试 15/15 通过。
+- 端到端 demo 跑通：通过 BlackHole 2ch 捕获日语测试音频，经 SenseVoice 识别、Argos 翻译后输出中文字幕。
