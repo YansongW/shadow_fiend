@@ -1,5 +1,34 @@
 # Changelog
 
+## [0.0.2] - 2026-06-26
+
+shadow_fiend v0.0.2：流式低延迟 pipeline，系统托盘 UI，opus-mt 翻译引擎。
+
+### Added
+- 引入 Silero VAD 替代能量阈值 VAD，切句更鲁棒、延迟更低。
+- 新增 SenseVoice 短窗口流式 ASR（`src/asr/streaming_sensevoice.py`），默认 500 ms 窗口 / 200 ms hop。
+- 新增 opus-mt 直接翻译引擎（`src/translation/opus_engine.py`），支持日/韩到中文的英语 pivot 翻译。
+- 系统托盘 / 菜单栏控制器（`src/ui/tray_controller.py`），支持开始/暂停、样式、位置、点击穿透、导出 SRT、退出。
+- 流式主流程（`src/pipeline_streaming.py`）：音频捕获 → Silero VAD → 流式 ASR → 翻译 → UI，ASR 仅在检测到语音时运行以节省算力。
+- ASR 启动预热，避免首次推理高延迟。
+- 新增影魔头像 Logo 多尺寸版本（`assets/logo_*.png`）。
+- 新增端到端延迟测试脚本（`tests/e2e_latency_test.py`、`tests/run_e2e_latency_benchmark.py`）。
+- 新增 `setup.py` / `pyproject.toml`，支持 wheel 与 sdist 打包。
+
+### Changed
+- 翻译模块优先使用 opus-mt，不支持时回退 Argos Translate。
+- 默认 VAD 参数调整为更低延迟：`threshold=0.4`、`min_speech_ms=150`、`min_silence_ms=200`。
+- UI 浮窗右键菜单精简，主要入口迁移至系统托盘。
+- CLI 新增 ASR/VAD 参数：`--asr-window-ms`、`--asr-hop-ms`、`--vad-threshold`、`--vad-min-speech-ms`、`--vad-min-silence-ms`、`--vad-max-utterance-ms`。
+
+### Fixed
+- 修复 Silero VAD buffer 截断时索引偏移的 bug。
+- 修复 StreamingSenseVoiceASR 短窗口误识别问题：窗口未满时不触发 ASR。
+
+### Verified
+- 日/韩合成集端到端延迟测试：first_final 平均日 269 ms / 韩 230 ms（MPS 设备）。
+- 构建产物：`shadow_fiend-0.0.2-py3-none-any.whl`、`shadow_fiend-0.0.2.tar.gz`。
+
 ## [0.0.1] - 2026-06-25
 
 shadow_fiend 首个 MVE 版本。

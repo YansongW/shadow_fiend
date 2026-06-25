@@ -12,6 +12,8 @@ torchaudio>=2.3.0
 
 # Translation
 argostranslate>=1.9.6
+transformers>=4.40.0
+sentencepiece>=0.2.0
 
 # UI
 PyQt6>=6.7.0

@@ -19,22 +19,24 @@
 
 <p align="center">
   <b>Turn any movie without subtitles into a watchable experience.</b><br>
-  shadow_fiend captures your system audio, transcribes speech locally with SenseVoice, translates with Argos, and overlays bilingual subtitles in real time.
+  shadow_fiend captures your system audio, transcribes speech locally with SenseVoice, translates locally, and overlays bilingual subtitles in real time.
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/ASR-SenseVoice-ff006e?style=flat-square">
-  <img src="https://img.shields.io/badge/Translation-Argos-8338ec?style=flat-square">
-  <img src="https://img.shields.io/badge/UI-PyQt6-3a86ff?style=flat-square">
-  <img src="https://img.shields.io/badge/Status-MVE-fb5607?style=flat-square">
+  <img src="https://img.shields.io/badge/VAD-Silero-06d6a0?style=flat-square">
+  <img src="https://img.shields.io/badge/Translation-opus--mt%20%2F%20Argos-8338ec?style=flat-square">
+  <img src="https://img.shields.io/badge/UI-PyQt6%20%2B%20Tray-3a86ff?style=flat-square">
+  <img src="https://img.shields.io/badge/Status-v0.0.2-fb5607?style=flat-square">
 </p>
 
 ## Features
 
 - 🔒 **Fully offline** — audio never leaves your machine
-- 🚀 **Fast local ASR** — SenseVoice-Small optimized for Chinese, Japanese, Korean
-- 🌐 **Local translation** — Argos Translate engine, no API keys
+- 🚀 **Streaming low-latency ASR** — SenseVoice-Small + Silero VAD + 500 ms sliding window
+- 🌐 **Local translation** — Helsinki-NLP/opus-mt preferred, Argos Translate fallback
 - 🎨 **Floating subtitle overlay** — transparent, always-on-top, draggable
+- 🖥️ **System tray / menu bar** — start/pause, style, position, click-through, SRT export
 - 🎬 **Built for watching** — captures system audio from any player
 
 ## Quick Start
@@ -71,14 +73,14 @@ Supported languages: `zh`, `en`, `ja`, `ko`.
 
 ## Development Status
 
-MVE stage. Core modules implemented and verified:
+v0.0.2 released. Core modules implemented and verified:
 
 - ✅ Audio capture (BlackHole + PyAudio)
-- ✅ VAD segmentation
-- ✅ SenseVoice ASR
-- ✅ Argos Translate
-- ✅ PyQt6 subtitle overlay
-- ✅ End-to-end pipeline
+- ✅ Silero VAD segmentation
+- ✅ Streaming SenseVoice ASR (500 ms window / 200 ms hop)
+- ✅ opus-mt direct translation engine with Argos fallback
+- ✅ PyQt6 subtitle overlay + system tray controller
+- ✅ Streaming end-to-end pipeline
 
 End-to-end live demo verified on macOS Apple Silicon + BlackHole 2ch.
 
@@ -100,13 +102,20 @@ shadow_fiend/
 ├── README.md
 ├── README.zh.md
 ├── README.ko.md
+├── CHANGELOG.md
+├── ROADMAP.md
+├── setup.py
+├── pyproject.toml
 ├── src/
-│   ├── audio/       # audio capture + VAD
-│   ├── asr/         # SenseVoice ASR
-│   ├── translation/ # Argos translation
-│   ├── ui/          # subtitle overlay
-│   └── pipeline.py  # orchestration
-└── scripts/
+│   ├── audio/                # audio capture + Silero VAD
+│   ├── asr/                  # SenseVoice ASR + streaming wrapper
+│   ├── translation/          # opus-mt engine + Argos fallback
+│   ├── ui/                   # subtitle overlay + tray controller
+│   ├── pipeline_streaming.py # streaming orchestration
+│   └── main.py               # CLI entry point
+├── scripts/                  # setup / run helpers
+├── tests/                    # benchmarks (test branch)
+└── assets/                   # logo files
 ```
 
 ## Trademark Disclaimer
