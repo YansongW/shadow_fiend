@@ -1,0 +1,332 @@
+{
+  "ja": [
+    {
+      "file": "001_こんにちは.wav",
+      "result": {
+        "audio_duration_ms": 842.8,
+        "first_vad_speech_ms": 56.7,
+        "first_partial_ms": null,
+        "first_partial_text": null,
+        "first_final_ms": 154.6,
+        "first_final_text": "こんにち？",
+        "first_translation_ms": 4780.5,
+        "first_translation_text": "喂? 喂? 来人啊?",
+        "partial_count": 0,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "002_おはようございます.wav",
+      "result": {
+        "audio_duration_ms": 1241.6,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 118.2,
+        "first_partial_text": "はよ後？",
+        "first_final_ms": 283.9,
+        "first_final_text": "おはようござ、います。",
+        "first_translation_ms": 4916.7,
+        "first_translation_text": "早上好,我刚从你家回来",
+        "partial_count": 4,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "003_ありがとうございます.wav",
+      "result": {
+        "audio_duration_ms": 1370.9,
+        "first_vad_speech_ms": 46.6,
+        "first_partial_ms": 121.8,
+        "first_partial_text": "ありがとう？",
+        "first_final_ms": 281.0,
+        "first_final_text": "ありがとうござ。います。",
+        "first_translation_ms": 4762.3,
+        "first_translation_text": "谢谢",
+        "partial_count": 4,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "004_すみません.wav",
+      "result": {
+        "audio_duration_ms": 821.1,
+        "first_vad_speech_ms": 51.0,
+        "first_partial_ms": 126.4,
+        "first_partial_text": "いません。",
+        "first_final_ms": 386.0,
+        "first_final_text": "すみません。",
+        "first_translation_ms": 4865.1,
+        "first_translation_text": "对不起",
+        "partial_count": 1,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "005_お願いします.wav",
+      "result": {
+        "audio_duration_ms": 975.8,
+        "first_vad_speech_ms": 44.1,
+        "first_partial_ms": 119.3,
+        "first_partial_text": "願返し？",
+        "first_final_ms": 219.8,
+        "first_final_text": "お願いします。",
+        "first_translation_ms": 4689.3,
+        "first_translation_text": "请",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "006_はい_そうです.wav",
+      "result": {
+        "audio_duration_ms": 1056.8,
+        "first_vad_speech_ms": 47.6,
+        "first_partial_ms": 128.2,
+        "first_partial_text": "そう。",
+        "first_final_ms": 250.3,
+        "first_final_text": "はい、そうです。",
+        "first_translation_ms": 4766.8,
+        "first_translation_text": "是的,我是。 。 。",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "007_いいえ_違います.wav",
+      "result": {
+        "audio_duration_ms": 1330.2,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 5159.4,
+        "first_partial_text": "が、います。",
+        "first_final_ms": 367.1,
+        "first_final_text": "いいえ。",
+        "first_translation_ms": 4923.8,
+        "first_translation_text": "不,我说...",
+        "partial_count": 1,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "008_それは本当ですか.wav",
+      "result": {
+        "audio_duration_ms": 1458.2,
+        "first_vad_speech_ms": 48.6,
+        "first_partial_ms": 5125.0,
+        "first_partial_text": "本当です。",
+        "first_final_ms": 363.7,
+        "first_final_text": "それは？",
+        "first_translation_ms": 4870.5,
+        "first_translation_text": "这是什么?",
+        "partial_count": 2,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "009_わかりました.wav",
+      "result": {
+        "audio_duration_ms": 823.6,
+        "first_vad_speech_ms": 47.4,
+        "first_partial_ms": 123.7,
+        "first_partial_text": "わかりまし？",
+        "first_final_ms": 206.0,
+        "first_final_text": "わかりま？した？",
+        "first_translation_ms": 4629.4,
+        "first_translation_text": "好吗?",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "010_行きましょう.wav",
+      "result": {
+        "audio_duration_ms": 742.1,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 120.2,
+        "first_partial_text": "行きましょう？",
+        "first_final_ms": 181.9,
+        "first_final_text": "行きましょう。",
+        "first_translation_ms": 4812.7,
+        "first_translation_text": "我们走",
+        "partial_count": 1,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    }
+  ],
+  "ko": [
+    {
+      "file": "001_안녕하세요.wav",
+      "result": {
+        "audio_duration_ms": 879.9,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 123.0,
+        "first_partial_text": "안녕 하하세요",
+        "first_final_ms": 212.7,
+        "first_final_text": "안녕 하 세요.",
+        "first_translation_ms": 4821.0,
+        "first_translation_text": "你好,我叫艾莉森",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "002_감사합니다.wav",
+      "result": {
+        "audio_duration_ms": 889.9,
+        "first_vad_speech_ms": 48.1,
+        "first_partial_ms": 131.1,
+        "first_partial_text": "사 합니다.",
+        "first_final_ms": 217.9,
+        "first_final_text": "감사합니다.",
+        "first_translation_ms": 4745.9,
+        "first_translation_text": "谢谢",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "003_죄송합니다.wav",
+      "result": {
+        "audio_duration_ms": 869.9,
+        "first_vad_speech_ms": 48.4,
+        "first_partial_ms": 126.9,
+        "first_partial_text": "송합니다.",
+        "first_final_ms": 203.6,
+        "first_final_text": "송 합니다.",
+        "first_translation_ms": 5420.8,
+        "first_translation_text": "发送。",
+        "partial_count": 2,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "004_네__알겠습니다.wav",
+      "result": {
+        "audio_duration_ms": 1309.3,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 121.0,
+        "first_partial_text": "알.",
+        "first_final_ms": 218.6,
+        "first_final_text": "네, 알 겠 습니다.",
+        "first_translation_ms": 4880.9,
+        "first_translation_text": "是的,我理解,我明白,我明白,我明白,我明白,我明白,我明白",
+        "partial_count": 2,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "005_아니요__괜찮습니다.wav",
+      "result": {
+        "audio_duration_ms": 1658.1,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 121.2,
+        "first_partial_text": "によう。",
+        "first_final_ms": 168.2,
+        "first_final_text": "아니요。",
+        "first_translation_ms": 4847.2,
+        "first_translation_text": "不,不,不,不。 \\ N",
+        "partial_count": 3,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "006_오늘_날씨가_좋네요.wav",
+      "result": {
+        "audio_duration_ms": 1437.4,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 120.4,
+        "first_partial_text": "늘날.",
+        "first_final_ms": 340.1,
+        "first_final_text": "오늘 날씨 가 좋 네요.",
+        "first_translation_ms": 4795.3,
+        "first_translation_text": "今天天气不错",
+        "partial_count": 5,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "007_무엇을_하고_있어요.wav",
+      "result": {
+        "audio_duration_ms": 1274.4,
+        "first_vad_speech_ms": 43.5,
+        "first_partial_ms": 124.6,
+        "first_partial_text": "엇 을 하.",
+        "first_final_ms": 168.0,
+        "first_final_text": "무엇 을 하고.",
+        "first_translation_ms": 4584.4,
+        "first_translation_text": "你在干吗?",
+        "partial_count": 2,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "008_제_이름은_김민수입니다.wav",
+      "result": {
+        "audio_duration_ms": 1656.7,
+        "first_vad_speech_ms": 45.3,
+        "first_partial_ms": 122.0,
+        "first_partial_text": "이 름은.",
+        "first_final_ms": 173.4,
+        "first_final_text": "제 이름은.",
+        "first_translation_ms": 5183.3,
+        "first_translation_text": "我的名字是。 我的名字是。 我的名字是,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,我叫,",
+        "partial_count": 1,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "009_당신의_이름은_무엇입니까.wav",
+      "result": {
+        "audio_duration_ms": 1813.7,
+        "first_vad_speech_ms": 52.7,
+        "first_partial_ms": 150.5,
+        "first_partial_text": "신의い.",
+        "first_final_ms": 260.5,
+        "first_final_text": "당신의 이름은.",
+        "first_translation_ms": 4915.6,
+        "first_translation_text": "你的名字 你的名字 你的名字 你的名字",
+        "partial_count": 4,
+        "final_count": 2,
+        "engine": "opus-mt"
+      }
+    },
+    {
+      "file": "010_어제_밤에_뭐_했어요.wav",
+      "result": {
+        "audio_duration_ms": 1379.3,
+        "first_vad_speech_ms": 0.0,
+        "first_partial_ms": 130.2,
+        "first_partial_text": "제 밤에.",
+        "first_final_ms": 332.9,
+        "first_final_text": "어제 밤 에 뭐 했어요.",
+        "first_translation_ms": 4895.0,
+        "first_translation_text": "我昨晚做了什么? 昨晚我做了什麽?",
+        "partial_count": 5,
+        "final_count": 1,
+        "engine": "opus-mt"
+      }
+    }
+  ],
+  "ja_first_vad_speech_ms_avg": 34.2,
+  "ja_first_partial_ms_avg": 1238.0,
+  "ja_first_final_ms_avg": 269.4,
+  "ko_first_vad_speech_ms_avg": 23.8,
+  "ko_first_partial_ms_avg": 127.1,
+  "ko_first_final_ms_avg": 229.6
+}

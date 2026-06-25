@@ -1,0 +1,253 @@
+[
+  {
+    "engine": "sensevoice",
+    "language": "ko",
+    "num_clips": 30,
+    "avg_cer": 0.0333,
+    "avg_wer": 0.0333,
+    "avg_latency_ms": 487.19,
+    "clips": [
+      {
+        "id": "ko_syn_001",
+        "reference": "안녕하세요.",
+        "hypothesis": "안녕 하 세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 549.65
+      },
+      {
+        "id": "ko_syn_002",
+        "reference": "감사합니다.",
+        "hypothesis": "감사합니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 498.45
+      },
+      {
+        "id": "ko_syn_003",
+        "reference": "죄송합니다.",
+        "hypothesis": "죄송 합니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 498.91
+      },
+      {
+        "id": "ko_syn_004",
+        "reference": "네, 알겠습니다.",
+        "hypothesis": "네, 알 겠 습니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 523.88
+      },
+      {
+        "id": "ko_syn_005",
+        "reference": "아니요, 괜찮습니다.",
+        "hypothesis": "아니요, 괜 찮습니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 478.63
+      },
+      {
+        "id": "ko_syn_006",
+        "reference": "오늘 날씨가 좋네요.",
+        "hypothesis": "오늘 날씨 가 좋 네요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 483.76
+      },
+      {
+        "id": "ko_syn_007",
+        "reference": "무엇을 하고 있어요?",
+        "hypothesis": "무엇 을 하고 있 어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 479.93
+      },
+      {
+        "id": "ko_syn_008",
+        "reference": "제 이름은 김민수입니다.",
+        "hypothesis": "제 이름 름은 김민수 입니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 466.75
+      },
+      {
+        "id": "ko_syn_009",
+        "reference": "당신의 이름은 무엇입니까?",
+        "hypothesis": "당신의 이름은 무엇입니까?",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 482.79
+      },
+      {
+        "id": "ko_syn_010",
+        "reference": "어제 밤에 뭐 했어요?",
+        "hypothesis": "어제 밤 에 뭐 했어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 477.58
+      },
+      {
+        "id": "ko_syn_011",
+        "reference": "영화 볼러 가고 싶어요.",
+        "hypothesis": "영화 보러 가고 싶어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 477.48
+      },
+      {
+        "id": "ko_syn_012",
+        "reference": "이 책은 정말 재미있어요.",
+        "hypothesis": "이 책 은 정말 재미있 어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 487.69
+      },
+      {
+        "id": "ko_syn_013",
+        "reference": "시간이 없으니 서둘러 주세요.",
+        "hypothesis": "시 간이 없 으니 서둘러 주세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 486.81
+      },
+      {
+        "id": "ko_syn_014",
+        "reference": "일본어를 잘하시네요.",
+        "hypothesis": "일본 어를 잘 하시 네요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 481.08
+      },
+      {
+        "id": "ko_syn_015",
+        "reference": "다시 한 번 말씀해 주세요.",
+        "hypothesis": "다시 한번 말씀 해 주세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 470.88
+      },
+      {
+        "id": "ko_syn_016",
+        "reference": "정말 감사합니다.",
+        "hypothesis": "정말 감사 합니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 480.9
+      },
+      {
+        "id": "ko_syn_017",
+        "reference": "괜찮으세요?",
+        "hypothesis": "괜찮 으세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 494.17
+      },
+      {
+        "id": "ko_syn_018",
+        "reference": "조심하세요.",
+        "hypothesis": "조심 하 세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 484.59
+      },
+      {
+        "id": "ko_syn_019",
+        "reference": "빨리 돌아와 주세요.",
+        "hypothesis": "빨리 돌아와 주세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 473.5
+      },
+      {
+        "id": "ko_syn_020",
+        "reference": "뭐 먹고 싶은 거 있어요?",
+        "hypothesis": "뭐 먹 고, 싶 은 거 있 어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 488.6
+      },
+      {
+        "id": "ko_syn_021",
+        "reference": "이 길로 쭉 가세요.",
+        "hypothesis": "이 길로 쭉 하 세요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 481.6
+      },
+      {
+        "id": "ko_syn_022",
+        "reference": "그것이 사실입니까?",
+        "hypothesis": "그것이 사실입니까?",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 479.62
+      },
+      {
+        "id": "ko_syn_023",
+        "reference": "이해했습니다.",
+        "hypothesis": "1 해 했 습니다.",
+        "cer": 1.0,
+        "wer": 1.0,
+        "latency_ms": 492.33
+      },
+      {
+        "id": "ko_syn_024",
+        "reference": "갑시다.",
+        "hypothesis": "갑시다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 490.09
+      },
+      {
+        "id": "ko_syn_025",
+        "reference": "학생입니다.",
+        "hypothesis": "학생 입니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 486.88
+      },
+      {
+        "id": "ko_syn_026",
+        "reference": "이 사람은 제 친구입니다.",
+        "hypothesis": "이 사람 은, 제 친구 입니다.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 487.82
+      },
+      {
+        "id": "ko_syn_027",
+        "reference": "오랜만이에요.",
+        "hypothesis": "오랜만 이 에요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 485.23
+      },
+      {
+        "id": "ko_syn_028",
+        "reference": "보고 싶었어요.",
+        "hypothesis": "보 고 싶 었 어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 481.34
+      },
+      {
+        "id": "ko_syn_029",
+        "reference": "잘 지냈어요?",
+        "hypothesis": "잘 지냈 어요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 483.87
+      },
+      {
+        "id": "ko_syn_030",
+        "reference": "고마워요.",
+        "hypothesis": "고마워요.",
+        "cer": 0.0,
+        "wer": 0.0,
+        "latency_ms": 480.82
+      }
+    ],
+    "dataset": "synthetic"
+  }
+]
