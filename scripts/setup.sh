@@ -25,7 +25,7 @@ fi
 
 # Install system dependencies
 echo "==> Installing system dependencies via Homebrew..."
-brew install portaudio blackhole-2ch
+brew install portaudio blackhole-2ch ffmpeg
 
 # Create virtual environment
 if [ ! -d ".venv" ]; then
