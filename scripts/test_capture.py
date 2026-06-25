@@ -21,7 +21,7 @@ from audio.capture import AudioCaptureModule
 
 
 def main():
-    print("YiMu audio capture test")
+    print("YingMo audio capture test")
     print("=" * 40)
 
     try:

@@ -19,7 +19,7 @@ from ui.subtitle_window import SubtitleWindow
 
 
 def main():
-    print("YiMu UI test")
+    print("YingMo UI test")
     print("Close the subtitle window to exit.")
 
     window = SubtitleWindow(source_lang="ja", target_lang="zh")

@@ -3,7 +3,7 @@ set -e
 
 cd "$(dirname "$0")/.."
 
-echo "==> YiMu setup script for macOS"
+echo "==> YingMo setup script for macOS"
 
 # Check Python version
 python_version=$(python3 --version 2>&1 | awk '{print $2}')
@@ -12,7 +12,7 @@ minor=$(echo "$python_version" | cut -d. -f2)
 
 echo "Python version: $python_version"
 if [ "$major" -lt 3 ] || { [ "$major" -eq 3 ] && [ "$minor" -lt 10 ]; }; then
-    echo "ERROR: YiMu requires Python 3.10 or newer."
+    echo "ERROR: YingMo requires Python 3.10 or newer."
     echo "Current version ($python_version) is not supported."
     echo "Please install Python 3.10+ via https://www.python.org or Homebrew:"
     echo "    brew install python@3.11"
@@ -52,4 +52,4 @@ echo "==> Setup complete."
 echo "IMPORTANT: Please configure a Multi-Output Device in Audio MIDI Setup"
 echo "           so that both your speakers and BlackHole 2ch receive audio."
 echo ""
-echo "To start YiMu, run: ./scripts/run.sh"
+echo "To start YingMo, run: ./scripts/run.sh"

@@ -1,4 +1,4 @@
-# YiMu（译幕）
+# YingMo（影魔）
 
 > 一个开源、免费、本地优先的实时字幕翻译器。
 > 专注于中日韩影视剧，无需官方字幕也能看懂。
@@ -50,11 +50,11 @@ cd yimu
 3. 同时勾选你的扬声器/耳机和 **BlackHole 2ch**
 4. 在系统设置中将该 Multi-Output Device 设为默认输出
 
-这样你既能听到视频声音，YiMu 也能从 BlackHole 捕获到音频。
+这样你既能听到视频声音，YingMo 也能从 BlackHole 捕获到音频。
 
 ## 开发状态
 
-YiMu 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
+YingMo 处于早期 MVE 阶段。核心模块已实现并通过单元测试：
 - ✅ 音频捕获
 - ✅ VAD 切句
 - ✅ SenseVoice ASR

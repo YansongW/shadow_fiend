@@ -1,4 +1,4 @@
-# YiMu MVE 技术设计文档
+# YingMo MVE 技术设计文档
 
 ## 1. 目标
 

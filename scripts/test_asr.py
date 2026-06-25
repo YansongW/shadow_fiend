@@ -18,12 +18,12 @@ from asr.sensevoice import ASRModule
 
 
 def main():
-    parser = argparse.ArgumentParser(description="YiMu ASR test")
+    parser = argparse.ArgumentParser(description="YingMo ASR test")
     parser.add_argument("audio", help="Path to audio file")
     parser.add_argument("--language", default="auto", help="Source language")
     args = parser.parse_args()
 
-    print("YiMu ASR test")
+    print("YingMo ASR test")
     print("=" * 40)
 
     asr = ASRModule()
