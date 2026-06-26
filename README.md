@@ -117,7 +117,7 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
   ghcr.io/yansongw/shadow_fiend:latest --source ja --target zh
 ```
 
-The image is multi-platform (`linux/amd64`, `linux/arm64`) and is built automatically on every GitHub Release via [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml).
+The image is built automatically on every GitHub Release via [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml). The default published platform is `linux/amd64`; `linux/arm64` can be added via the `platforms` workflow input when needed.
 
 ## macOS 双击运行
 

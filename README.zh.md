@@ -127,7 +127,7 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
   ghcr.io/yansongw/shadow_fiend:latest --source ja --target zh
 ```
 
-该镜像支持多平台（`linux/amd64`、`linux/arm64`），并通过 [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml) 在每次 GitHub Release 时自动构建发布。
+该镜像通过 [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml) 在每次 GitHub Release 时自动构建发布。默认发布平台为 `linux/amd64`；如需 `linux/arm64`，可通过 workflow 的 `platforms` 输入添加。
 
 > Docker 无法直接访问 macOS 音频硬件，端到端 demo 仍需 macOS + BlackHole 2ch。
 

@@ -127,7 +127,7 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
   ghcr.io/yansongw/shadow_fiend:latest --source ko --target zh
 ```
 
-이 이미지는 멀티 플랫폼(`linux/amd64`, `linux/arm64`)을 지원하며, [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml)을 통해 GitHub Release가 생성될 때마다 자동으로 빌드 및 게시됩니다.
+이 이미지는 [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml)을 통해 GitHub Release가 생성될 때마다 자동으로 빌드 및 게시됩니다. 기본 게시 플랫폼은 `linux/amd64`이며, 필요한 경우 workflow의 `platforms` 입력을 통해 `linux/arm64`를 추가할 수 있습니다.
 
 > Docker는 macOS 오디오 하드웨어에 직접 접근할 수 없으므로 엔드투엔드 demo는 macOS + BlackHole 2ch가 필요합니다.
 
