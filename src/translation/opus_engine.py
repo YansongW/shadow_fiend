@@ -10,24 +10,82 @@ from __future__ import annotations
 import logging
 import os
 import time
+from functools import lru_cache
 from pathlib import Path
 from typing import Optional
 
 logger = logging.getLogger(__name__)
 
 
+def _deduplicate_repeated_tokens(text: str, max_repeat: int = 3) -> str:
+    """
+    检测并截断连续重复 token 导致的退化输出。
+
+    例如 opus-mt-en-zh 对无标点短输入可能生成：
+        "你好 你好 你好 你好 ..."
+    该函数会将其截断为：
+        "你好"
+
+    规则：若某个 token（或带标点的变体）连续重复超过 max_repeat 次，
+    则只保留第一次出现。
+    """
+    if not text:
+        return text
+
+    # 按空白切分 token
+    tokens = text.split()
+    if len(tokens) < max_repeat + 1:
+        return text
+
+    # 检测连续重复的最小单元（1 个或 2 个 token）
+    for unit_len in (1, 2):
+        for start in range(len(tokens) - unit_len * max_repeat + 1):
+            unit = tokens[start : start + unit_len]
+            repeats = 1
+            pos = start + unit_len
+            while pos + unit_len <= len(tokens) and tokens[pos : pos + unit_len] == unit:
+                repeats += 1
+                pos += unit_len
+            if repeats > max_repeat:
+                # 截断：保留第一次出现，加适当标点后的内容
+                prefix = " ".join(tokens[: start + unit_len])
+                # 如果原句有结尾标点，尽量保留
+                tail = " ".join(tokens[start + unit_len : start + unit_len * 2])
+                if tail and tail[-1] in {"，", "。", "！", "？", ",", ".", "!", "?"}:
+                    prefix += tail[-1]
+                return prefix
+    return text
+
+
+def _dynamic_max_length(input_token_count: int, min_len: int = 24, max_len: int = 128) -> int:
+    """
+    根据输入 token 数动态决定 decode 的最大长度。
+
+    短句不需要 decode 到 128，避免无标点输入触发重复生成。
+    正常句子保留足够空间，防止过早截断有效内容。
+    """
+    target = input_token_count * 3 + 16
+    return max(min_len, min(target, max_len))
+
+
 class _OpusTranslator:
-    """单个 opus-mt 语言对的轻量封装，支持延迟加载与复用。"""
+    """单个 opus-mt 语言对的轻量封装，支持延迟加载、warmup 与复用。"""
+
+    # 高频短句缓存：只缓存长度较短的输入，避免内存无限增长
+    _CACHE_MAX_LEN = 32
+    _CACHE_SIZE = 512
 
     def __init__(
         self,
         model_name: str,
         device: str,
         cache_dir: str,
+        warmup: bool = True,
     ):
         self.model_name = model_name
         self.device = device
         self.cache_dir = cache_dir
+        self._warmup = warmup
         self._tokenizer = None
         self._model = None
         self._loaded = False
@@ -60,18 +118,41 @@ class _OpusTranslator:
         self._model.eval()
         self._loaded = True
 
-    def translate(self, text: str) -> str:
+        if self._warmup:
+            logger.debug("Warming up opus-mt model '%s'", self.model_name)
+            self._translate_impl("hello", use_cache=False)
+
+    @lru_cache(maxsize=_CACHE_SIZE)
+    def _cached_translate(self, text: str) -> str:
+        """LRU 缓存层：对高频短句复用翻译结果。"""
+        return self._translate_impl(text, use_cache=False)
+
+    def _translate_impl(self, text: str, use_cache: bool = True) -> str:
         if not text:
             return ""
+        if use_cache and len(text) <= self._CACHE_MAX_LEN:
+            return self._cached_translate(text)
+
         self._load()
         import torch
 
         inputs = self._tokenizer(text, return_tensors="pt", padding=True)
+        input_len = inputs["input_ids"].shape[1]
+        max_length = _dynamic_max_length(input_len)
+
         if self.device:
             inputs = {k: v.to(self.device) for k, v in inputs.items()}
         with torch.no_grad():
-            outputs = self._model.generate(**inputs, num_beams=1, max_length=128)
-        return self._tokenizer.batch_decode(outputs, skip_special_tokens=True)[0].strip()
+            outputs = self._model.generate(
+                **inputs,
+                num_beams=1,
+                max_length=max_length,
+            )
+        raw = self._tokenizer.batch_decode(outputs, skip_special_tokens=True)[0].strip()
+        return _deduplicate_repeated_tokens(raw)
+
+    def translate(self, text: str) -> str:
+        return self._translate_impl(text)
 
 
 class OpusEngine:
