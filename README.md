@@ -119,14 +119,14 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
 
 The image is built automatically on every GitHub Release via [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml). The default published platform is `linux/amd64`; `linux/arm64` can be added via the `platforms` workflow input when needed.
 
-## macOS 双击运行
+## macOS Double-Click Launchers
 
-针对 v0.0.1 发布包，项目根目录提供两个 `.command` 脚本：
+For the v0.0.1 release package, two `.command` scripts are provided in the project root:
 
-1. **安装 shadow_fiend.command** — 首次运行时双击，自动安装 Homebrew 依赖并创建 Python 虚拟环境。
-2. **启动 shadow_fiend.command** — 双击启动实时字幕浮窗（默认 `ja -> zh`）。
+1. **Install shadow_fiend.command** — Double-click on first run to install Homebrew dependencies and create a Python virtual environment.
+2. **Launch shadow_fiend.command** — Double-click to start the live subtitle overlay (defaults to `ja -> zh`).
 
-> 双击前请确保已配置好 BlackHole 2ch 多输出音频设备。
+> Make sure the BlackHole 2ch multi-output audio device is configured before double-clicking.
 
 ## Project Structure
 
