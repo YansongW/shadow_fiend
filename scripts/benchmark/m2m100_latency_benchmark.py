@@ -19,7 +19,7 @@ import psutil
 import torch
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
-MODEL_NAME = "facebook/m2m100_418M"
+MODEL_NAME = "/tmp/m2m100_418M"
 CACHE_DIR = Path.home() / ".cache" / "shadow_fiend_m2m_benchmark"
 REPORT_DIR = Path("/tmp/m2m100_benchmark")
 WARMUP_RUNS = 3
@@ -79,7 +79,7 @@ def benchmark_m2m(pair: str) -> dict:
     src_lang, tgt_lang = LANG_MAP[pair]
     print(f"\n[Loading {MODEL_NAME} for {pair} ...]")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, cache_dir=str(CACHE_DIR))
-    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME, cache_dir=str(CACHE_DIR), from_tf=True)
+    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_NAME, cache_dir=str(CACHE_DIR))
     model.eval()
 
     # m2m-100 需要设置目标语言 token
