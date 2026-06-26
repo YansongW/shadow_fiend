@@ -23,8 +23,9 @@ venv/
 # macOS
 .DS_Store
 
-# Models and caches
+# Models, data and caches
 models/
+data/
 cache/
 *.gguf
 *.onnx

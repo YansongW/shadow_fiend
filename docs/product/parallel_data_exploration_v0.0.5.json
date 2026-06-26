@@ -1,0 +1,359 @@
+{
+  "ccmatrix_ja_zh": {
+    "status": "ok",
+    "dataset": "yhavinga/ccmatrix",
+    "config": "ja-zh",
+    "total_seen": 100001,
+    "valid_count": 99691,
+    "empty_count": 0,
+    "too_long_count": 309,
+    "avg_src_len": 34.7,
+    "avg_tgt_len": 26.3,
+    "samples": [
+      {
+        "src": "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿▲ 今更クリスマスネタもどうかと思うけど。",
+        "tgt": "授權內容文字說明：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
+        "score": 1.248708
+      },
+      {
+        "src": "ではまた＞＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿つづく",
+        "tgt": "返回网站首页 ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝",
+        "score": 1.2476853
+      },
+      {
+        "src": "今年は大きいのが次から次へと　┐(´д｀)┌",
+        "tgt": "然後就沒有然後了‧‧‧‧‧‧",
+        "score": 1.2474426
+      },
+      {
+        "src": "I COULD STARE AT あなた FOR 24 HOURS BEAUTIFUL MICHAEL",
+        "tgt": "I COULD STARE AT 你 FOR 24 HOURS BEAUTIFUL MICHAEL",
+        "score": 1.2471466
+      },
+      {
+        "src": "29. かれらのために，天も地も泣かず，かれらに猶予も与えられなかった。",
+        "tgt": "二九. 天地沒有哭他們，他們也沒有獲得緩刑。",
+        "score": 1.2469997
+      },
+      {
+        "src": "2-227．またかれらが、もし離婚を堅く決心したならば、誠にアッラーは全聴にして全知であられる。",
+        "tgt": "227.如果他们决心休妻，那末，真主确是全聪的，确是全知的。",
+        "score": 1.2463614
+      },
+      {
+        "src": "「神(かみ)はまた、アブラハムに言(い)われた。",
+        "tgt": "我喊叫说：“易卜拉欣啊！",
+        "score": 1.2462229
+      },
+      {
+        "src": "43. またイブラーヒームの民も，ルートの民も，",
+        "tgt": "43.易卜拉欣的宗族、魯特的宗族、",
+        "score": 1.2457144
+      },
+      {
+        "src": "「神(かみ)はアブラハムに言(い)われた。",
+        "tgt": "我喊叫说：“易卜拉欣啊！",
+        "score": 1.2449969
+      },
+      {
+        "src": "151. これらの者こそは，本当に不信者である。",
+        "tgt": "151.这等人，确是不信道的。",
+        "score": 1.2447965
+      },
+      {
+        "src": "6 あなたは，天地にある凡てのものをアッラーが知っておられることを知らないのか。",
+        "tgt": "“难道你不知道真主是全知天地万物的吗？",
+        "score": 1.2442949
+      },
+      {
+        "src": "著者： 柊ましろ 著者： 榎宮祐",
+        "tgt": "負責人：陳宥維",
+        "score": 1.2437656
+      },
+      {
+        "src": "75. 天と地の隠されたことは，等しく明瞭に書冊の中に（記されて）ある。",
+        "tgt": "75.天上地下，没有一件隐微的事物，不记录在一本明白的天经中。",
+        "score": 1.2437589
+      },
+      {
+        "src": "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿ 正しい戦争など存在しない。",
+        "tgt": "＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿。",
+        "score": 1.2433857
+      },
+      {
+        "src": "スペイン語 (es)Presidenta suiza pide buena voluntad",
+        "tgt": "西班牙语 (es)Presidenta suiza pide buena voluntad",
+        "score": 1.243123
+      },
+      {
+        "src": "5 かれらは（それを）嘘であるとする。",
+        "tgt": "5 義人憎惡虛謊，",
+        "score": 1.2426995
+      },
+      {
+        "src": "43. またイブラーヒームの民も，ルートの民も，",
+        "tgt": "易卜拉欣的宗族、鲁特的宗族、",
+        "score": 1.2423267
+      },
+      {
+        "src": "あなた rock my world michael あなた REALLY DO!",
+        "tgt": "你 rock my world michael 你 REALLY DO!",
+        "score": 1.24226
+      },
+      {
+        "src": "227．またかれらが、もし離婚を堅く決心したならば、誠にアッラーは全聴にして全知であられる。",
+        "tgt": "227.如果他们决心休妻，那末，真主确是全聪的，确是全知的。",
+        "score": 1.2421348
+      },
+      {
+        "src": "58-15．アッラーはかれらのため、厳しい懲罰を備えられる。",
+        "tgt": "58 : 16 真主已為他們準備嚴厲的刑罰。",
+        "score": 1.2419833
+      }
+    ]
+  },
+  "ccmatrix_ko_zh": {
+    "status": "ok",
+    "dataset": "yhavinga/ccmatrix",
+    "config": "ko-zh",
+    "total_seen": 100001,
+    "valid_count": 99895,
+    "empty_count": 0,
+    "too_long_count": 105,
+    "avg_src_len": 37.3,
+    "avg_tgt_len": 27.9,
+    "samples": [
+      {
+        "src": "223그들은 귀를 기울이나 그들대다수는 거짓하는 자들이라",
+        "tgt": "223.他们侧耳而听，他们大半是说谎的。",
+        "score": 1.2489936
+      },
+      {
+        "src": "페이스북 (",
+        "tgt": "脸书（",
+        "score": 1.2482786
+      },
+      {
+        "src": "(n) 그리고 그가 이스라엘의 많은 아들들을 주 그들의 하나님께로 도로 돌이킬 것이니라.",
+        "tgt": "他將使許多以色列子民歸向主——他們的神。",
+        "score": 1.2463342
+      },
+      {
+        "src": "2013년 9월 14일 오후 1시 07분 Can you color the hands grey?",
+        "tgt": "2013 年 09 月 14 日 @ 下午 1 時 07 分 Can you color the hands grey?",
+        "score": 1.245191
+      },
+      {
+        "src": "2012년 9월 26일 오전 8시 47분 Yes you need Half Life 1!",
+        "tgt": "2012 年 09 月 26 日 @ 上午 8 時 47 分 Yes you need Half Life 1!",
+        "score": 1.2378182
+      },
+      {
+        "src": "151 \"이만한 믿음을 보지 못하였노라!\"",
+        "tgt": "151.这等人，确是不信道的。",
+        "score": 1.23699
+      },
+      {
+        "src": "2013년 10월 19일 오전 10시 14분 Port it to my game Library)) <",
+        "tgt": "2013 年 10 月 19 日 @ 上午 10 時 14 分 Port it to my game Library)) <",
+        "score": 1.2358036
+      },
+      {
+        "src": "2009년 8월 5일 오전 9시 51분 Oh My God I'm Buying this, I'm buying this Rain Bronson",
+        "tgt": "2009 年 08 月 5 日 @ 上午 9 時 51 分 Oh My God I'm Buying this, I'm buying this Rain Bronson",
+        "score": 1.2357451
+      },
+      {
+        "src": "⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ 유쾌한 우정 사이에 인간 물음표 재민 씨,,, 킬포 ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬ㅋ⫬",
+        "tgt": "３、其他方式＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿。",
+        "score": 1.2351608
+      },
+      {
+        "src": "여호와께는 인자하심과 풍성한 구속이 있음이라 저가 이스라엘을 그 모든 죄악에서 구속하시리로다",
+        "tgt": "「他(爾撒)只不過是(我的)一個僕人，我賜給他我的恩典，我並使他成為以色列子孫的模範。",
+        "score": 1.2329478
+      },
+      {
+        "src": "(n) 그리고 그가 이스라엘의 많은 아들들을 주 그들의 하나님께로 도로 돌이킬 것이니라.",
+        "tgt": "他將勸導許多 以色列 人回心轉意，歸順主——他們的上帝。",
+        "score": 1.2326288
+      },
+      {
+        "src": "찬성 14표(",
+        "tgt": "14次阅读 评论(",
+        "score": 1.232014
+      },
+      {
+        "src": "애굽 사람이 이스라엘 자손을 인하여 근심하여, 이스라엘 자손의 역사(役事)를 엄하게 하여,",
+        "tgt": "在西奈山真主顯現他的 榮耀給以色列的子孫，叫他們謹守十誡。",
+        "score": 1.2292565
+      },
+      {
+        "src": "(n) 그리고 그가 이스라엘의 많은 아들들을 주 그들의 하나님께로 도로 돌이킬 것이니라.",
+        "tgt": "他要使許\\多以色列人回轉，歸於主他們的神。",
+        "score": 1.2290596
+      },
+      {
+        "src": "가장 좋아하는 show that Antony's in?",
+        "tgt": "最喜爱的 显示 that Antony's in?",
+        "score": 1.2284491
+      },
+      {
+        "src": "2014년 1월 6일 오후 8시 11분 what servers have this AurelianRifle",
+        "tgt": "2014 年 01 月 6 日 @ 下午 8 時 11 分 what servers have this AurelianRifle",
+        "score": 1.2278792
+      },
+      {
+        "src": "2013년 3월 5일 오전 3시 01분 I'm missing the same one!",
+        "tgt": "2013 年 03 月 5 日 @ 上午 3 時 01 分 I'm missing the same one!",
+        "score": 1.2272007
+      },
+      {
+        "src": "1099년(",
+        "tgt": "1909年 (",
+        "score": 1.226866
+      },
+      {
+        "src": "그는 중재자로서 하나님의 마음을 이스라엘 백성에게로",
+        "tgt": "的心，和赦罪的恩，赐给以色列人。",
+        "score": 1.2259663
+      },
+      {
+        "src": "Taste 우리의 Asses Loser",
+        "tgt": "Taste 我們的 Asses Loser",
+        "score": 1.2253909
+      }
+    ]
+  },
+  "ccmatrix_en_zh": {
+    "status": "ok",
+    "dataset": "yhavinga/ccmatrix",
+    "config": "en-zh",
+    "total_seen": 100001,
+    "valid_count": 99266,
+    "empty_count": 0,
+    "too_long_count": 734,
+    "avg_src_len": 67.8,
+    "avg_tgt_len": 24.8,
+    "samples": [
+      {
+        "src": "And [the Lord] became impatient over the misery of Israel.",
+        "tgt": "因他違背了耶和華的約，又因他在以色列中，行了愚妄的事。",
+        "score": 1.2494794
+      },
+      {
+        "src": "We saved the world, or at least stopped two worlds colliding.”",
+        "tgt": "我们拯救了世界,或者至少停止两个世界碰撞。",
+        "score": 1.249218
+      },
+      {
+        "src": "You will then invade Rome, and Allah will enable you to conquer it.",
+        "tgt": "然后，您将入侵罗马，真主将使您能够征服它。",
+        "score": 1.2483513
+      },
+      {
+        "src": "Maybe tonight or tomorrow [Wednesday] I will speak.”",
+        "tgt": "也许今晚或明天[星期三]我会发言。",
+        "score": 1.2479619
+      },
+      {
+        "src": "They use what is before them, give thanks for it,",
+        "tgt": "前者是“承蒙赏赐”，后者是“多谢款待”的意思。",
+        "score": 1.2477312
+      },
+      {
+        "src": "God made men and women so they can bear children,” Mugabe said.",
+        "tgt": "上帝创造了男女，所以他们可以生孩子，”穆加贝说。",
+        "score": 1.247479
+      },
+      {
+        "src": "'They make things happen on the stage; they invent; they create.”",
+        "tgt": "”他们让事情发生在舞台上;他们发明;他们创造。",
+        "score": 1.2473739
+      },
+      {
+        "src": "If God’s Son sets you free, you are free indeed.",
+        "tgt": "神的儿子使你有自由，你就真正得自由。",
+        "score": 1.2471316
+      },
+      {
+        "src": "'But why should one servant return?'",
+        "tgt": "\"但是，为什么有一个仆人要回来呢？\"",
+        "score": 1.2469896
+      },
+      {
+        "src": "And mayest thou see thy children’s children; peace be upon Israel .",
+        "tgt": "願你看見你兒女的兒女！願平安歸於以色列！（《詩》128:6）",
+        "score": 1.2469136
+      },
+      {
+        "src": "The only thing these men were guilty of was wanting to protect you and me.\"",
+        "tgt": "“这些男人唯一有罪的就是想要保护你和我。",
+        "score": 1.2468921
+      },
+      {
+        "src": "But Mariam could not hear comfort in God's words.",
+        "tgt": "但是瑪黎安無法從真主的話語裡聽見安慰。",
+        "score": 1.2466819
+      },
+      {
+        "src": "“One of the ways of doing that [was] through the food.",
+        "tgt": "\"而這麼做的途徑之一[就是]通過食物來體現。",
+        "score": 1.2464613
+      },
+      {
+        "src": "CREATE TABLE activity (",
+        "tgt": "create table 图书(",
+        "score": 1.2460833
+      },
+      {
+        "src": "We saw dead bodies on the side, and some being rescued.\"",
+        "tgt": "我们看到旁边有一些尸体，还有一些人被救起。",
+        "score": 1.245452
+      },
+      {
+        "src": "“‘(3) The committee shall,",
+        "tgt": "因為＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿",
+        "score": 1.2447476
+      },
+      {
+        "src": "“This is how you treat your own people,” said another.",
+        "tgt": "“这就是你们如何对待自己的人民”，另一个说。",
+        "score": 1.244348
+      },
+      {
+        "src": "If God’s Son sets you free, you are free indeed.",
+        "tgt": "要是上帝的儿子使你们得到自由，你们就真的是自由人了。",
+        "score": 1.2442355
+      },
+      {
+        "src": "This privacy policy (",
+        "tgt": "现在这款MEGA Privacy (",
+        "score": 1.2440808
+      },
+      {
+        "src": "\"It is a cherry seed; of course you will raise a cherry.\"",
+        "tgt": "”””这是一个樱桃种子;你当然会提高樱桃。",
+        "score": 1.2438594
+      }
+    ]
+  },
+  "ccmatrix_ja_zho": {
+    "status": "partial",
+    "dataset": "yhavinga/ccmatrix",
+    "config": "ja-zho",
+    "error": "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/moses/ja-zho.txt.zip",
+    "total_seen": 0,
+    "valid_count": 0,
+    "samples": []
+  },
+  "ccmatrix_ko_zho": {
+    "status": "partial",
+    "dataset": "yhavinga/ccmatrix",
+    "config": "ko-zho",
+    "error": "https://object.pouta.csc.fi/OPUS-CCMatrix/v1/moses/ko-zho.txt.zip",
+    "total_seen": 0,
+    "valid_count": 0,
+    "samples": []
+  }
+}
