@@ -1,0 +1,150 @@
+[
+  {
+    "backend": "transformers",
+    "pair": "ja-en",
+    "latency_ms": {
+      "mean": 31.06,
+      "min": 15.11,
+      "max": 45.6,
+      "p50": 33.8,
+      "p95": 43.22
+    },
+    "memory_mb": 1.7,
+    "translations": [
+      "Hello.",
+      "Thank you.",
+      "Excuse me, please, just a minute.",
+      "This is really delicious.",
+      "What time is tomorrow's meeting?",
+      "I like this movie.",
+      "How do we get to the station?",
+      "How are you?",
+      "I'll see you tomorrow.",
+      "I'd like to borrow this book."
+    ]
+  },
+  {
+    "backend": "ctranslate2_fp32",
+    "pair": "ja-en",
+    "latency_ms": {
+      "mean": 26.32,
+      "min": 12.7,
+      "max": 39.29,
+      "p50": 28.78,
+      "p95": 36.91
+    },
+    "memory_mb": 0.34,
+    "translations": [
+      "Hello.",
+      "Thank you.",
+      "Excuse me, please, just a minute.",
+      "This is really delicious.",
+      "What time is tomorrow's meeting?",
+      "I like this movie.",
+      "How do we get to the station?",
+      "How are you?",
+      "I'll see you tomorrow.",
+      "I'd like to borrow this book."
+    ],
+    "bleu_vs_transformers": 100.0
+  },
+  {
+    "backend": "ctranslate2_int8",
+    "pair": "ja-en",
+    "latency_ms": {
+      "mean": 19.17,
+      "min": 8.5,
+      "max": 29.44,
+      "p50": 19.46,
+      "p95": 27.1
+    },
+    "memory_mb": 0.05,
+    "translations": [
+      "Hello.",
+      "Thank you.",
+      "Excuse me, please, just a minute.",
+      "It's really delicious.",
+      "What time is the meeting tomorrow?",
+      "I like this movie.",
+      "How do you get to the station?",
+      "How are you?",
+      "Bye. See you tomorrow.",
+      "I'd like to borrow this book."
+    ],
+    "bleu_vs_transformers": 71.99
+  },
+  {
+    "backend": "transformers",
+    "pair": "en-zh",
+    "latency_ms": {
+      "mean": 72.43,
+      "min": 15.56,
+      "max": 532.78,
+      "p50": 24.02,
+      "p95": 520.4
+    },
+    "memory_mb": 15.2,
+    "translations": [
+      "你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好",
+      "非常感谢",
+      "对不起,请等一下",
+      "味道真好吃",
+      "明天会议几点开始",
+      "我喜欢这部电影",
+      "我怎么才能到车站",
+      "你好吗?",
+      "再见,明天见",
+      "请借我这本书"
+    ]
+  },
+  {
+    "backend": "ctranslate2_fp32",
+    "pair": "en-zh",
+    "latency_ms": {
+      "mean": 61.05,
+      "min": 12.98,
+      "max": 444.12,
+      "p50": 20.1,
+      "p95": 440.01
+    },
+    "memory_mb": 1.31,
+    "translations": [
+      "你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好",
+      "非常感谢",
+      "对不起,请等一下",
+      "味道真好吃",
+      "明天会议几点开始",
+      "我喜欢这部电影",
+      "我怎么才能到车站",
+      "你好吗?",
+      "再见,明天见",
+      "请借我这本书"
+    ],
+    "bleu_vs_transformers": 98.48
+  },
+  {
+    "backend": "ctranslate2_int8",
+    "pair": "en-zh",
+    "latency_ms": {
+      "mean": 46.47,
+      "min": 9.04,
+      "max": 339.3,
+      "p50": 14.98,
+      "p95": 330.74
+    },
+    "memory_mb": 1.27,
+    "translations": [
+      "你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好 你好",
+      "非常感谢你",
+      "对不起,请等一下",
+      "好吃,这真的很好吃",
+      "明天会议几点开始",
+      "我喜欢这部电影",
+      "我怎么才能到车站",
+      "你好吗?",
+      "再见,明天见",
+      "请借我这本书"
+    ],
+    "bleu_vs_transformers": 97.23
+  }
+]
