@@ -119,15 +119,6 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
 
 The image is built automatically on every GitHub Release via [`.github/workflows/docker-publish.yml`](.github/workflows/docker-publish.yml). The default published platform is `linux/amd64`; `linux/arm64` can be added via the `platforms` workflow input when needed.
 
-## macOS Double-Click Launchers
-
-For the v0.0.1 release package, two `.command` scripts are provided in the project root:
-
-1. **Install shadow_fiend.command** — Double-click on first run to install Homebrew dependencies and create a Python virtual environment.
-2. **Launch shadow_fiend.command** — Double-click to start the live subtitle overlay (defaults to `ja -> zh`).
-
-> Make sure the BlackHole 2ch multi-output audio device is configured before double-clicking.
-
 ## Project Structure
 
 ```
@@ -139,6 +130,7 @@ shadow_fiend/
 ├── ROADMAP.md
 ├── setup.py
 ├── pyproject.toml
+├── Dockerfile
 ├── src/
 │   ├── audio/                # audio capture + Silero VAD
 │   ├── asr/                  # SenseVoice ASR + streaming wrapper

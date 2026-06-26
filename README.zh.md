@@ -22,9 +22,11 @@
 ## 特性
 
 - 🔒 **完全离线** — 音频不上传云端
-- 🚀 **快速本地 ASR** — SenseVoice-Small，针对中日韩优化
-- 🌐 **本地翻译** — Argos Translate 引擎，无需 API key
+- 🚀 **流式低延迟 ASR** — SenseVoice-Small + Silero VAD + 500 ms 滑动窗口
+- 🔇 **实时降噪** — RNNoise 在识别前降低背景噪声
+- 🌐 **本地翻译** — 优先使用 Helsinki-NLP/opus-mt，Argos Translate 回退
 - 🎨 **浮窗字幕** — 透明、置顶、可拖拽
+- 🖥️ **系统托盘 / 菜单栏** — 开始/暂停、降噪开关、样式、位置、点击穿透、SRT 导出
 - 🎬 **专为观影设计** — 捕获任意播放器的系统音频
 
 ## 快速开始
@@ -61,45 +63,21 @@ cd shadow_fiend
 
 ## 开发状态
 
-当前处于 MVE 阶段，核心模块已实现并通过单元测试：
+v0.0.3 已发布。核心模块已实现并验证：
 
 - ✅ 音频捕获（BlackHole + PyAudio）
-- ✅ VAD 切句
-- ✅ SenseVoice ASR
-- ✅ Argos 翻译
-- ✅ PyQt6 字幕浮窗
-- ✅ 端到端 pipeline
+- ✅ Silero VAD 切句
+- ✅ 流式 SenseVoice ASR（500 ms 窗口 / 200 ms hop）
+- ✅ RNNoise 实时降噪（16 kHz I/O，内部 48 kHz）
+- ✅ opus-mt 直译引擎，Argos 回退
+- ✅ PyQt6 字幕浮窗 + 系统托盘控制器
+- ✅ 流式端到端 pipeline
 
-端到端实时演示需要在配备 Python 3.10+ 和 Homebrew 的 macOS 环境上验证。
+已在 macOS Apple Silicon + BlackHole 2ch 上完成端到端实时演示验证。
 
-## 一键测试
+> **测试代码**维护在 [`test`](https://github.com/YansongW/shadow_fiend/tree/test) 分支。详见 [`ROADMAP.md`](ROADMAP.md)。
 
-全自动流程：环境检测 → 安装依赖 → 单元测试 → 30 秒 demo（自动录屏） → 打包日志 → 清理：
-
-```bash
-./scripts/one_click_test.sh
-```
-
-选项：
-- `--no-cleanup` — 保留测试环境与下载的模型，方便排查
-- `--duration <秒>` — 调整 demo 运行时长（默认 30 秒）
-- `--yes` — 跳过音频路由确认提示
-
-运行结束后会在 `test-reports/` 下生成 zip 报告，包含日志、录屏视频、环境信息和 pip 列表。
-
-> 首次运行录屏时会弹出系统授权对话框，请点击允许，否则录屏会失败。
-
-### 手动测试命令
-
-```bash
-python scripts/test_runner.py setup     # 检测环境、安装依赖、创建 .venv-test
-python scripts/test_runner.py test      # 运行 pytest
-python scripts/test_runner.py demo --duration 30   # demo + 自动录屏
-python scripts/test_runner.py logs      # 打包报告 zip
-python scripts/test_runner.py cleanup   # 删除 .venv-test、日志、模型
-```
-
-### Docker
+## Docker
 
 镜像已发布到 **GitHub Packages**，用于可复现的开发和无 GUI 测试：
 
@@ -133,6 +111,8 @@ docker run --rm -e DISPLAY=host.docker.internal:0 \
 
 ## 运行测试
 
+测试代码与基准数据位于 [`test`](https://github.com/YansongW/shadow_fiend/tree/test) 分支。切换到该分支后：
+
 ```bash
 ./.venv/bin/python -m pytest tests/ -v
 ```
@@ -144,14 +124,21 @@ shadow_fiend/
 ├── README.md
 ├── README.zh.md
 ├── README.ko.md
+├── CHANGELOG.md
+├── ROADMAP.md
+├── setup.py
+├── pyproject.toml
+├── Dockerfile
 ├── src/
-│   ├── audio/       # 音频捕获 + VAD
-│   ├── asr/         # SenseVoice 语音识别
-│   ├── translation/ # Argos 翻译
-│   ├── ui/          # 字幕浮窗
-│   └── pipeline.py  # 流程编排
-├── tests/
-└── scripts/
+│   ├── audio/                # 音频捕获 + Silero VAD
+│   ├── asr/                  # SenseVoice ASR + 流式封装
+│   ├── translation/          # opus-mt 引擎 + Argos 回退
+│   ├── ui/                   # 字幕浮窗 + 托盘控制器
+│   ├── pipeline_streaming.py # 流式流程编排
+│   └── main.py               # CLI 入口
+├── scripts/                  # 安装 / 运行辅助脚本
+├── tests/                    # 基准测试（test 分支）
+└── assets/                   # Logo 文件
 ```
 
 ## 商标声明
