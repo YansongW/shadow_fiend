@@ -38,8 +38,8 @@
 ### Fine-tune 配置
 
 ```python
-model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m-100-418M")
-tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m-100-418M")
+model = M2M100ForConditionalGeneration.from_pretrained("facebook/m2m100_418M")
+tokenizer = M2M100Tokenizer.from_pretrained("facebook/m2m100_418M")
 
 # 训练参数
 batch_size = 8          # 单卡 A100 可尝试 16

@@ -25,7 +25,7 @@ venv/
 
 # Models, data and caches
 models/
-data/
+/data/
 cache/
 *.gguf
 *.onnx

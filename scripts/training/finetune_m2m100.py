@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Fine-tune facebook/m2m-100-418M on cleaned CCMatrix parallel corpus.
+Fine-tune facebook/m2m100_418M on cleaned CCMatrix parallel corpus.
 
 Usage:
     python scripts/training/finetune_m2m100.py \
         --data_dir data/translation_corpus_v0.0.5 \
         --output_dir models/m2m100-418M-zh-ja-ko-en \
-        --model_name facebook/m2m-100-418M \
+        --model_name facebook/m2m100_418M \
         --num_train_epochs 3 \
         --per_device_train_batch_size 8 \
         --learning_rate 5e-5
@@ -44,7 +44,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_dir", required=True)
     parser.add_argument("--output_dir", required=True)
-    parser.add_argument("--model_name", default="facebook/m2m-100-418M")
+    parser.add_argument("--model_name", default="facebook/m2m100_418M")
     parser.add_argument("--max_source_length", type=int, default=128)
     parser.add_argument("--max_target_length", type=int, default=128)
     parser.add_argument("--num_train_epochs", type=int, default=3)
@@ -119,21 +119,21 @@ def build_dataset(sources, targets, src_langs, tokenizer, max_source_length: int
 
     def preprocess(example):
         tokenizer.src_lang = example["src_lang"]
+        tokenizer.tgt_lang = "zh"
         model_inputs = tokenizer(
             example["source"],
             max_length=max_source_length,
             truncation=True,
             padding=False,
         )
-        with tokenizer.as_target_tokenizer():
-            labels = tokenizer(
-                example["target"],
-                max_length=max_target_length,
-                truncation=True,
-                padding=False,
-            )
+        labels = tokenizer(
+            text_target=example["target"],
+            max_length=max_target_length,
+            truncation=True,
+            padding=False,
+        )
         model_inputs["labels"] = labels["input_ids"]
-        model_inputs["forced_bos_token_id"] = tokenizer.lang_code_to_id["zh_CN"]
+        model_inputs["forced_bos_token_id"] = tokenizer.lang_code_to_id["zh"]
         return model_inputs
 
     ds = ds.map(preprocess, batched=False, remove_columns=ds.column_names)
@@ -159,8 +159,8 @@ def main():
     tokenizer = M2M100Tokenizer.from_pretrained(args.model_name)
     model = M2M100ForConditionalGeneration.from_pretrained(args.model_name)
 
-    # 强制目标语言为简体中文
-    model.config.forced_bos_token_id = tokenizer.lang_code_to_id["zh_CN"]
+    # 强制目标语言为中文
+    model.config.forced_bos_token_id = tokenizer.lang_code_to_id["zh"]
 
     pairs = ["ja-zh", "ko-zh", "en-zh"]
     data_dir = Path(args.data_dir)
