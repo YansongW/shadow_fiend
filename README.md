@@ -1,3 +1,7 @@
+> **Note: This is the `v0.0.5-finetune` branch.**  
+> It contains the data pipeline and training scripts for fine-tuning `facebook/m2m100_418M` on ja↔zh / ko↔zh / en↔zh parallel corpora.  
+> For the main application, see the [`main`](https://github.com/YansongW/shadow_fiend/tree/main) branch.
+
 <div align="center">
   <img src="docs/logo.svg" width="200" alt="shadow_fiend logo">
   <h1>shadow_fiend</h1>
@@ -88,6 +92,93 @@ v0.0.3 released. Core modules implemented and verified:
 End-to-end live demo verified on macOS Apple Silicon + BlackHole 2ch.
 
 > **Testing code** is maintained on the [`test`](https://github.com/YansongW/shadow_fiend/tree/test) branch. See [`ROADMAP.md`](ROADMAP.md) for planned improvements.
+
+## v0.0.5 Model Training
+
+This branch fine-tunes `facebook/m2m100_418M` on 586k cleaned parallel sentence pairs for **ja→zh, ko→zh, en→zh**.
+
+### Dataset
+
+Final corpus: `data/translation_corpus_final/`
+
+| Split | Pairs |
+|---|---|
+| train.tsv | 574,465 |
+| val.tsv | 5,861 |
+| test.tsv | 5,861 |
+
+Sources: CCMatrix small (168k), CCMatrix large (356k), OPUS (61k).
+
+### Setup on a fresh Mac mini
+
+```bash
+# 1. Clone this branch
+git clone --branch v0.0.5-finetune https://github.com/YansongW/shadow_fiend.git
+cd shadow_fiend
+
+# 2. Create a virtual environment
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -r requirements.txt
+
+# 3. Prepare the final corpus (choose one method)
+#    A) Copy from another machine:
+#       scp -r user@other-host:/path/to/shadow_fiend/data/translation_corpus_final data/
+#    B) Or regenerate from scratch on main branch (slow, CPU-only):
+#       git checkout main
+#       bash scripts/data/pipeline_v0.0.5_large_from_langid.sh
+#       bash scripts/data/pipeline_opus.sh
+#       .venv/bin/python scripts/data/generate_final_report.py
+#       git checkout v0.0.5-finetune
+
+# 4. Check environment
+.venv/bin/python scripts/training/check_env.py
+```
+
+### Run Training
+
+```bash
+# Optional: set Hugging Face write token if you want to upload the model
+export HF_TOKEN=hf_xxxxxxxxxxxxxxxx
+
+# Start training + auto push code + optional HF upload
+bash scripts/training/train_and_publish.sh
+```
+
+Training hyperparameters ( tuned for 64 GB Apple Silicon ):
+- Epochs: 3
+- Batch size: 4 per device
+- Gradient accumulation: 8 (effective batch 32)
+- Max length: 128
+- Learning rate: 5e-5
+- Device: auto (`mps` on Apple Silicon, `cpu` fallback)
+
+The wrapper will:
+1. Train the model to `models/m2m100-418M-zh-ja-ko-en-v0.0.5/`.
+2. Upload it to Hugging Face (if `HF_TOKEN` is set).
+3. Commit and push any code changes back to the `v0.0.5-finetune` branch.
+
+### Manual Steps
+
+If you prefer to run training without the wrapper:
+
+```bash
+.venv/bin/python scripts/training/finetune_m2m100_v0.0.5.py \
+  --data_dir data/translation_corpus_final \
+  --output_dir models/m2m100-418M-zh-ja-ko-en-v0.0.5 \
+  --num_train_epochs 3 \
+  --per_device_train_batch_size 4 \
+  --gradient_accumulation_steps 8
+```
+
+Upload to Hugging Face manually:
+
+```bash
+export HF_TOKEN=hf_xxxxxxxxxxxxxxxx
+.venv/bin/python scripts/training/upload_to_hf.py \
+  --model_dir models/m2m100-418M-zh-ja-ko-en-v0.0.5 \
+  --repo_id YansongW/m2m100-418M-zh-ja-ko-en-v0.0.5
+```
 
 ## Docker
 

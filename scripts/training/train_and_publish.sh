@@ -24,8 +24,9 @@ if [ ! -f "${DATA_DIR}/train.tsv" ]; then
 fi
 
 if [ -z "${HF_TOKEN}" ]; then
-    echo "Error: HF_TOKEN environment variable is not set."
-    exit 1
+    echo "Warning: HF_TOKEN not set. Model will NOT be uploaded to Hugging Face."
+    echo "Set it later with: export HF_TOKEN=your_write_token"
+    SKIP_HF_UPLOAD=1
 fi
 
 VENV=".venv/bin/python"
@@ -47,9 +48,9 @@ echo "========================================"
     --output_dir "${OUTPUT_DIR}" \
     --model_name facebook/m2m100_418M \
     --num_train_epochs 3 \
-    --per_device_train_batch_size 2 \
-    --per_device_eval_batch_size 4 \
-    --gradient_accumulation_steps 16 \
+    --per_device_train_batch_size 4 \
+    --per_device_eval_batch_size 8 \
+    --gradient_accumulation_steps 8 \
     --max_source_length 128 \
     --max_target_length 128 \
     --learning_rate 5e-5 \
@@ -60,14 +61,20 @@ echo "========================================"
     --logging_steps 500 \
     --seed 42
 
-echo "========================================"
-echo "Training complete. Uploading to HF..."
-echo "========================================"
+if [ -z "${SKIP_HF_UPLOAD}" ]; then
+    echo "========================================"
+    echo "Training complete. Uploading to HF..."
+    echo "========================================"
 
-# Upload model to Hugging Face
-"$VENV" scripts/training/upload_to_hf.py \
-    --model_dir "${OUTPUT_DIR}" \
-    --repo_id "${HF_REPO_ID}"
+    # Upload model to Hugging Face
+    "$VENV" scripts/training/upload_to_hf.py \
+        --model_dir "${OUTPUT_DIR}" \
+        --repo_id "${HF_REPO_ID}"
+else
+    echo "========================================"
+    echo "Training complete. Skipping HF upload (HF_TOKEN not set)."
+    echo "========================================"
+fi
 
 echo "========================================"
 echo "Pushing code changes to ${BRANCH}..."
