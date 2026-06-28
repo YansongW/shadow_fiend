@@ -54,3 +54,32 @@
 ## 当前任务
 
 见项目根目录 TODO 列表或 `ROADMAP.md`。
+
+## 当前任务：v0.0.5 Fine-tuning
+
+> 当前活跃分支：`v0.0.5-finetune`
+
+本阶段目标：在清洗后的 v0.0.5 平行语料上微调 `facebook/m2m100_418M`，支持 ja↔zh、ko↔zh、en↔zh，并将模型发布到 Hugging Face。
+
+### 已完成
+- `main` 分支：CCMatrix small + large + OPUS 数据清洗，最终语料 `data/translation_corpus_final/`（586,187 对）。
+- `v0.0.5-finetune` 分支：训练脚本、HF 上传脚本、一键训练发布脚本已就绪。
+- Smoke test 通过：MPS 上可正常训练。
+
+### 关键文件
+- `docs/TASK_v0.0.5_FINETUNE.md` — 详细任务说明
+- `scripts/training/finetune_m2m100_v0.0.5.py` — 训练脚本
+- `scripts/training/upload_to_hf.py` — 模型上传脚本
+- `scripts/training/train_and_publish.sh` — 训练 + 自动 push 代码 + 上传模型
+
+### 在 Mac mini 上运行
+```bash
+git checkout v0.0.5-finetune
+export HF_TOKEN=your_write_token
+bash scripts/training/train_and_publish.sh
+```
+
+### 注意事项
+- `data/` 目录被 gitignore，需要在 Mac mini 上本地准备或重新跑数据 pipeline。
+- 训练前确认 `.venv` 已安装依赖：`pip install -r requirements.txt`
+- 若 Kimi Code 重启后看到本文件，优先完成 `docs/TASK_v0.0.5_FINETUNE.md` 中的训练与发布任务。
