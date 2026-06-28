@@ -42,7 +42,7 @@ def load_pairs(path: Path):
             if not line:
                 continue
             parts = line.split("\t")
-            if len(parts) != 2:
+            if len(parts) < 2:
                 continue
             sources.append(parts[0])
             targets.append(parts[1])
